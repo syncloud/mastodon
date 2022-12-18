@@ -1,0 +1,17 @@
+diff --git a/streaming/index.js b/streaming/index.js
+index 0350c488d..2260e3729 100644
+--- a/streaming/index.js
++++ b/streaming/index.js
+@@ -1289,11 +1289,5 @@ onPortAvailable(err => {
+     log.error('Could not start server, the port or socket is in use');
+     return;
+   }
+-
+-  throng({
+-    workers: numWorkers,
+-    lifetime: Infinity,
+-    start: startWorker,
+-    master: startMaster,
+-  });
++  startWorker();
+ });
