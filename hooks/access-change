@@ -1,0 +1,4 @@
+#!/snap/mastodon/current/python/bin/python
+
+from installer import Installer
+Installer().on_domain_change()

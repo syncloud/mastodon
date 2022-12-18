@@ -1,0 +1,50 @@
+apps:
+  postgresql:
+    user: git
+    command: bin/service.postgresql.sh start
+    #post-start-command: bin/service.postgresql.sh post-start
+    daemon: forking
+    plugs:
+    - network
+    - network-bind
+    restart-condition: always
+    start-timeout: 200s
+    before: [server]
+
+  server:
+    user: git
+    command: bin/service.server.sh start
+    daemon: simple
+    plugs:
+    - network
+    - network-bind
+    restart-condition: always
+    start-timeout: 200s
+    after: [postgresql]
+
+  storage-change:
+    command: hooks/storage-change
+
+  access-change:
+    command: hooks/access-change
+
+  backup-pre-stop:
+    command: hooks/backup-pre-stop
+
+  restore-pre-start:
+    command: hooks/restore-pre-start
+
+  restore-post-start:
+    command: hooks/restore-post-start
+
+  psql:
+    command: bin/psql.sh
+
+  pgdumpall:
+    command: bin/pg_dumpall.sh
+
+confinement: strict
+description: Mastodon
+grade: stable
+name: mastodon
+summary: Mastodon
