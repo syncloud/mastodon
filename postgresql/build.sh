@@ -3,7 +3,7 @@
 DIR=$( cd "$( dirname "$0" )" && pwd )
 cd ${DIR}
 
-MAJOR_VERSION=$1
+VERSION=$1
 
 BUILD_DIR=${DIR}/../build/snap/postgresql
 
@@ -12,7 +12,6 @@ docker run postgres:syncloud postgres --help
 docker create --name=postgres syncloud
 mkdir -p ${BUILD_DIR}
 cd ${BUILD_DIR}
-echo "${MAJOR_VERSION}" > ${BUILD_DIR}/../db.major.version
 docker export postgres -o postgres.tar
 tar xf postgres.tar
 rm -rf postgres.tar
