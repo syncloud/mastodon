@@ -44,6 +44,14 @@ local build(arch, test_ui, dind) = [{
             ]
         },
         {
+            name: "build web",
+            image: "node:" + node,
+            commands: [
+                "cd build/snap/ruby/mastodon",
+                "yarn install --pure-lockfile"
+            ]
+        },
+        {
             name: "postgresql",
             image: "docker:" + dind,
             commands: [
