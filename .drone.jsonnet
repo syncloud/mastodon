@@ -5,6 +5,7 @@ local postgresql = "10-bullseye";
 local ruby = "3.0.4-slim-bullseye";
 local python = "3.8-slim-buster";
 local node = "16.19.0-bullseye-slim";
+local mastodon = "4.0.2";
 
 local build(arch, test_ui, dind) = [{
     kind: "pipeline",
@@ -26,7 +27,7 @@ local build(arch, test_ui, dind) = [{
             name: "download",
             image: "debian:buster-slim",
             commands: [
-                "./download.sh"
+                "./download.sh " + mastodon
             ]
         },
         {

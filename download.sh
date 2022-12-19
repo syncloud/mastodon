@@ -11,7 +11,7 @@ mkdir -p ${BUILD_DIR}
 cd ${DIR}/build
 
 apt update
-apt -y install wget unzip git
+apt -y install wget
 
 wget --progress=dot:giga ${DOWNLOAD_URL}/nginx/nginx-${ARCH}.tar.gz
 tar xf nginx-${ARCH}.tar.gz
