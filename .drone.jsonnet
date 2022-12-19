@@ -99,9 +99,9 @@ local build(arch, test_ui, dind) = [{
         },
         {
             name: "node test",
-            image: "docker:" + dind,
+            image: "debian:buster-slim",
             commands: [
-                "./node/test.sh " + node
+                "./node/test.sh"
             ],
             volumes: [
                 {
