@@ -13,7 +13,7 @@ ARCH=$(dpkg --print-architecture)
 SNAP_DIR=${DIR}/build/snap
 cd $SNAP_DIR
 
-du -h | sort -n -r | head -100
+du | sort -n -r | head -100
 
 apt update
 apt -y install squashfs-tools
@@ -33,4 +33,3 @@ echo ${PACKAGE} > ${DIR}/package.name
 mksquashfs ${SNAP_DIR} ${DIR}/${PACKAGE} -noappend -comp xz -no-xattrs -all-root
 mkdir ${DIR}/artifact
 cp ${DIR}/${PACKAGE} ${DIR}/artifact
-
