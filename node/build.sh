@@ -3,6 +3,7 @@
 DIR=$( cd "$( dirname "$0" )" && pwd )
 cd ${DIR}
 VERSION=$1
+BUILD_DIR=${DIR}/../build/snap/node
 docker build --build-arg VERSION=$VERSION -t syncloud .
 docker run syncloud nodejs --help
 docker create --name=nodejs syncloud
