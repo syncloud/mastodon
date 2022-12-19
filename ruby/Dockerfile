@@ -12,5 +12,7 @@ RUN bundle config deployment 'true'
 RUN bundle config without 'development test'
 RUN bundle install -j$(getconf _NPROCESSORS_ONLN)
 
+RUN apt remove -y git-core g++ gcc autoconf build-essential
+RUN apt autoremove -y
 RUN rm -rf /var/lib/apt/lists/*
 RUN rm -rf /var/lib/apt/lists/*
