@@ -7,7 +7,7 @@ BUILD_DIR=${DIR}/../build/snap/node
 docker build --build-arg VERSION=$VERSION -t syncloud .
 docker run syncloud nodejs --help
 docker create --name=nodejs syncloud
-mkdir -p ${BUILD_DIR}/bim
+mkdir -p ${BUILD_DIR}/bin
 cd ${BUILD_DIR}
 docker export nodejs -o nodejs.tar
 tar xf nodejs.tar
