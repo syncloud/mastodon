@@ -1,6 +1,6 @@
-#!/bin/bash -xe
+#!/bin/sh -xe
 
-DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+DIR=$( cd "$( dirname "$0" )" && pwd )
 DOWNLOAD_URL=https://github.com/syncloud/3rdparty/releases/download
 VERSION=$1
 ARCH=$(uname -m)
@@ -10,10 +10,7 @@ mkdir -p ${BUILD_DIR}
 
 cd ${DIR}/build
 
-apt update
-apt -y install wget
-
-wget --progress=dot:giga ${DOWNLOAD_URL}/nginx/nginx-${ARCH}.tar.gz
+wget ${DOWNLOAD_URL}/nginx/nginx-${ARCH}.tar.gz
 tar xf nginx-${ARCH}.tar.gz
 mv nginx ${BUILD_DIR}
 
