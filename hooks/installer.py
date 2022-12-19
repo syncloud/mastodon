@@ -30,22 +30,24 @@ install_file = join(paths.get_data_dir(APP_NAME), 'installed')
 class Installer:
     def __init__(self):
         self.app_dir = paths.get_app_dir(APP_NAME)
-        self.app_data_dir = paths.get_data_dir(APP_NAME)
+        self.common_dir = paths.get_data_dir(APP_NAME)
         self.data_dir = join('/var/snap', APP_NAME, 'current')
-        self.database_path = join(self.app_data_dir, PSQL_DATA_PATH)
+        self.database_path = join(self.common_dir, PSQL_DATA_PATH)
         self.log = logger.get_logger(APP_NAME)
         self.config_dir = join(self.data_dir, 'config')
         self.db = Database(self.app_dir, self.data_dir, self.config_dir, join(self.app_dir, PSQL_PATH), DB_USER, self.database_path, PSQL_PORT)
 
     def init_config(self):
-        linux.useradd(USER_NAME)
+        home_folder = join(self.common_dir, USER_NAME)
+        linux.useradd(USER_NAME, home_folder=home_folder)
+
         app_config_dir = join(self.app_dir, 'config')
-        log_path = join(self.app_data_dir, 'log')
+        log_path = join(self.common_dir, 'log')
         fs.makepath(log_path)
         storage_dir = storage.init_storage(APP_NAME, USER_NAME)
         variables = {
             'app_dir': self.app_dir,
-            'app_data_dir': self.app_data_dir,
+            'common_dir': self.common_dir,
             'database_dir': self.database_path,
             'db_psql_port': PSQL_PORT,
             'db_name': DB_NAME,
@@ -59,7 +61,7 @@ class Installer:
             'disable_registration': False
         }
         gen.generate_files(app_config_dir, self.config_dir, variables)
-        fs.chownpath(self.app_data_dir, USER_NAME, recursive=True)
+        fs.chownpath(self.common_dir, USER_NAME, recursive=True)
         fs.chownpath(self.data_dir, USER_NAME, recursive=True)
 
     def install(self):
