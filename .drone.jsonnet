@@ -65,7 +65,7 @@ local build(arch, test_ui, dind) = [{
             ]
         },
         {
-            name: "test postgresql",
+            name: "postgresql test",
             image: "debian:buster-slim",
             commands: [
                 "./postgresql/test.sh"
@@ -89,6 +89,19 @@ local build(arch, test_ui, dind) = [{
             image: "docker:" + dind,
             commands: [
                 "./node/build.sh " + node
+            ],
+            volumes: [
+                {
+                    name: "dockersock",
+                    path: "/var/run"
+                }
+            ]
+        },
+        {
+            name: "node test",
+            image: "docker:" + dind,
+            commands: [
+                "./node/test.sh " + node
             ],
             volumes: [
                 {

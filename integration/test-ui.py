@@ -36,13 +36,3 @@ def test_login(selenium, device_user, device_password):
 def test_teardown(driver):
     driver.quit()
 
-
-def run(cmd):
-    try:
-        print(cmd)
-        output = check_output(cmd, stderr=STDOUT, shell=True).decode()
-        print(output)
-        return output.strip()
-    except CalledProcessError as e:
-        print("error: " + e.output.decode())
-        raise e

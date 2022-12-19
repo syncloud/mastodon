@@ -13,6 +13,4 @@ docker export nodejs -o nodejs.tar
 tar xf nodejs.tar
 rm -rf nodejs.tar
 cp ${DIR}/node.sh ${BUILD_DIR}/bin
-ls -la ${BUILD_DIR}/bin
-${BUILD_DIR}/bin/node.sh --help
 rm -rf ${BUILD_DIR}/usr/src
