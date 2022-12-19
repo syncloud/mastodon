@@ -4,6 +4,7 @@ local go = "1.18.5";
 local postgresql = "10-bullseye";
 local ruby = "3.0.4-slim-bullseye";
 local python = "3.8-slim-buster";
+local node = "16.19.0-bullseye-slim";
 
 local build(arch, test_ui, dind) = [{
     kind: "pipeline",
