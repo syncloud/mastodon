@@ -48,6 +48,8 @@ local build(arch, test_ui, dind) = [{
             image: "node:" + node,
             commands: [
                 "cd build/snap/ruby/mastodon",
+                "apt update",
+                "apt install -y python-dev",
                 "yarn install --pure-lockfile"
             ]
         },
