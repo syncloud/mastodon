@@ -3,15 +3,13 @@
 DIR=$( cd "$( dirname "$0" )" && pwd )
 cd ${DIR}
 
-MAJOR_VERSION=10
+MAJOR_VERSION=$1
 
 BUILD_DIR=${DIR}/../build/snap/postgresql
 
-docker ps -a -q --filter ancestor=postgres:syncloud --format="{{.ID}}" | xargs docker stop | xargs docker rm || true
-docker rmi postgres:syncloud || true
-docker build --build-arg MAJOR_VERSION=$MAJOR_VERSION -t postgres:syncloud .
-#docker run postgres:syncloud postgres --help
-docker create --name=postgres postgres:syncloud
+docker build --build-arg VERSION=$VERSION -t syncloud .
+docker run postgres:syncloud postgres --help
+docker create --name=postgres syncloud
 mkdir -p ${BUILD_DIR}
 cd ${BUILD_DIR}
 echo "${MAJOR_VERSION}" > ${BUILD_DIR}/../db.major.version

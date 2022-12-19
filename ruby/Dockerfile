@@ -1,4 +1,5 @@
-FROM ruby:3.0.4-slim-bullseye
+ARG VERSION
+FROM ruby:$VERSION
 COPY mastodon /
 WORKDIR /mastodon
 RUN bundle config deployment 'true'

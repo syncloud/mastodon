@@ -1,6 +1,9 @@
 local name = "mastodon";
 local browser = "firefox";
 local go = "1.18.5";
+local postgresql = "10-bullseye";
+local ruby = "3.0.4-slim-bullseye";
+local python = "3.8-slim-buster";
 
 local build(arch, test_ui, dind) = [{
     kind: "pipeline",
@@ -29,7 +32,7 @@ local build(arch, test_ui, dind) = [{
             name: "ruby",
             image: "docker:" + dind,
             commands: [
-                "./ruby/build.sh"
+                "./ruby/build.sh " + ruby
             ],
             volumes: [
                 {
@@ -42,7 +45,7 @@ local build(arch, test_ui, dind) = [{
             name: "postgresql",
             image: "docker:" + dind,
             commands: [
-                "./postgresql/build.sh"
+                "./postgresql/build.sh " + postgresql
             ],
             volumes: [
                 {
@@ -58,11 +61,11 @@ local build(arch, test_ui, dind) = [{
                 "./postgresql/test.sh"
             ]
         },
-      {
-            name: "git",
+        {
+            name: "python",
             image: "docker:" + dind,
             commands: [
-                "./git/build.sh"
+                "./python/build.sh " + python
             ],
             volumes: [
                 {
@@ -72,10 +75,10 @@ local build(arch, test_ui, dind) = [{
             ]
         },
         {
-            name: "python",
+            name: "node",
             image: "docker:" + dind,
             commands: [
-                "./python/build.sh"
+                "./node/build.sh " + node
             ],
             volumes: [
                 {

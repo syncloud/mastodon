@@ -1,26 +1,31 @@
 apps:
   postgresql:
-    user: git
+    user: mastodon
     command: bin/service.postgresql.sh start
-    #post-start-command: bin/service.postgresql.sh post-start
     daemon: forking
-    plugs:
-    - network
-    - network-bind
     restart-condition: always
     start-timeout: 200s
-    before: [server]
 
-  server:
-    user: git
-    command: bin/service.server.sh start
+  streaming:
+    user: mastodon
+    command: bin/service.streaming.sh
     daemon: simple
-    plugs:
-    - network
-    - network-bind
     restart-condition: always
     start-timeout: 200s
-    after: [postgresql]
+
+  sidekiq:
+    user: mastodon
+    command: bin/service.sidekiq.sh
+    daemon: simple
+    restart-condition: always
+    start-timeout: 200s
+
+  web:
+    user: mastodon
+    command: bin/service.web.sh
+    daemon: simple
+    restart-condition: always
+    start-timeout: 200s
 
   storage-change:
     command: hooks/storage-change
