@@ -7,7 +7,8 @@ cd ${DIR}
 VERSION=$1
 PREFIX=/
 
-echo "building ruby"
+apt update
+apt install -y gnupg2 curl
 
 command curl -sSL https://rvm.io/mpapis.asc | gpg2 --import -
 command curl -sSL https://rvm.io/pkuczynski.asc | gpg2 --import -
