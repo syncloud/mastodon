@@ -11,7 +11,7 @@ apt install -y git imagemagick ffmpeg libpq-dev libxml2-dev libxslt1-dev file gi
                      zlib1g-dev libncurses5-dev libffi-dev libgdbm-dev \
                      libidn11-dev libicu-dev libjemalloc-dev
 
-export PATH=$PATH:$(echo /ruby/rubies/ruby-*/bin)
+export PATH=$PATH:/current/bin
 cd /mastodon
 
 bundle config deployment 'true'
@@ -21,5 +21,3 @@ bundle install -j$(getconf _NPROCESSORS_ONLN)
 apt remove -y git-core g++ gcc autoconf build-essential
 apt autoremove -y
 rm -rf /var/lib/apt/lists/*
-rm -rf /var/lib/apt/lists/*
-

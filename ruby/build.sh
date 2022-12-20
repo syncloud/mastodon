@@ -5,7 +5,6 @@ cd ${DIR}
 VERSION=$1
 BUILD_DIR=${DIR}/../build/snap/ruby
 docker build --build-arg VERSION=$VERSION -t syncloud .
-docker run syncloud ruby --help
 docker create --name=syncloud syncloud
 mkdir -p ${BUILD_DIR}
 cd ${BUILD_DIR}

@@ -5,7 +5,7 @@ DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 cd ${DIR}
 
 VERSION=$1
-PREFIX=/ruby
+PREFIX=/build
 
 apt update
 apt install -y gnupg2 curl procps
@@ -18,9 +18,7 @@ curl -sSL https://get.rvm.io | bash -s stable --path ${PREFIX}
 source ${PREFIX}/scripts/rvm
 rvm install ${VERSION} --movable
 
-ls -la /ruby/rubies
-ls -la /ruby/rubies/ruby-*/
-ls -la /ruby/rubies/ruby-*/bin
+mv /build/rubies/ruby-* /current
 
 rm /etc/rvmrc
 rm /etc/profile.d/rvm.sh
