@@ -8,7 +8,7 @@ VERSION=$1
 PREFIX=/ruby
 
 apt update
-apt install -y gnupg2 curl
+apt install -y gnupg2 curl procps
 
 command curl -sSL https://rvm.io/mpapis.asc | gpg2 --import -
 command curl -sSL https://rvm.io/pkuczynski.asc | gpg2 --import -
