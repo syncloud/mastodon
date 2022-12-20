@@ -12,6 +12,7 @@ apt install -y git imagemagick ffmpeg libpq-dev libxml2-dev libxslt1-dev file gi
                      libidn11-dev libicu-dev libjemalloc-dev
 
 export PATH=$PATH:$(echo /ruby/rubies/ruby-*/bin)
+cd /mastodon
 
 bundle config deployment 'true'
 bundle config without 'development test'
