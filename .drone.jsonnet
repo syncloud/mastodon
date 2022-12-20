@@ -23,13 +23,13 @@ local build(arch, test_ui, dind) = [{
                 "echo $DRONE_BUILD_NUMBER > version"
             ]
         },
-        {
-            name: "download",
-            image: "alpine:3.17.0",
+	{
+	    name: "download",
+	    image: "alpine:3.17.0",
             commands: [
-                "./download.sh " + mastodon
+	        "./download.sh " + mastodon
             ]
-        },
+	}, 
         {
             name: "ruby",
             image: "docker:" + dind,
@@ -44,13 +44,21 @@ local build(arch, test_ui, dind) = [{
             ]
         },
         {
-            name: "build web",
+            name: "ruby test",
+            image: "debian:buster-slim",
+            commands: [
+                "./snap/ruby/bin/ruby.sh -e 'puts Hello'"
+            ]
+        },
+        {
+            name: "web",
             image: "node:" + node,
             commands: [
                 "cd build/snap/ruby/mastodon",
                 "apt update",
                 "apt install -y python3-dev",
-                "yarn install --pure-lockfile"
+                "yarn install --pure-lockfile",
+                "ls -la"
             ]
         },
         {

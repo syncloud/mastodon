@@ -12,7 +12,4 @@ cd ${BUILD_DIR}
 docker export syncloud -o syncloud.tar
 tar xf syncloud.tar
 rm -rf syncloud.tar
-ls -la ${BUILD_DIR}/mastodon
-mv ${BUILD_DIR}/usr/local/bin/ruby ${BUILD_DIR}/usr/local/bin/ruby.bin
-cp ${DIR}/ruby ${BUILD_DIR}/usr/local/bin
-sed -i 's#/usr/local/bin/ruby#/snap/mastodon/current/ruby/usr/local/bin/ruby#g' ${BUILD_DIR}/usr/local/bin/bundle
+cp ${DIR}/bin/* ${BUILD_DIR}/bin
