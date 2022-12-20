@@ -11,7 +11,7 @@ apt install -y git imagemagick ffmpeg libpq-dev libxml2-dev libxslt1-dev file gi
                      zlib1g-dev libncurses5-dev libffi-dev libgdbm-dev \
                      libidn11-dev libicu-dev libjemalloc-dev
 
-export PATH=$PATH:/ruby/rubies/ruby-*/bin
+export PATH=$PATH:$(echo /ruby/rubies/ruby-*/bin)
 
 bundle config deployment 'true'
 bundle config without 'development test'
