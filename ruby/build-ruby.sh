@@ -19,8 +19,8 @@ source ${PREFIX}/scripts/rvm
 rvm install ${VERSION} --movable
 
 ls -la /ruby/rubies
-ls -la /ruby/rubies/*/
-ls -la /ruby/rubies/*/bin
+ls -la /ruby/rubies/ruby-*/
+ls -la /ruby/rubies/ruby-*/bin
 
 rm /etc/rvmrc
 rm /etc/profile.d/rvm.sh
