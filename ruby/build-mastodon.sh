@@ -10,6 +10,9 @@ apt install -y git imagemagick ffmpeg libpq-dev libxml2-dev libxslt1-dev file gi
                      bison build-essential libssl-dev libyaml-dev libreadline6-dev \
                      zlib1g-dev libncurses5-dev libffi-dev libgdbm-dev \
                      libidn11-dev libicu-dev libjemalloc-dev
+
+export PATH=$PATH:/rubies/*/bin
+
 bundle config deployment 'true'
 bundle config without 'development test'
 bundle install -j$(getconf _NPROCESSORS_ONLN)

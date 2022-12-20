@@ -17,5 +17,9 @@ curl -sSL https://get.rvm.io | bash -s stable --path ${PREFIX}
 source ${PREFIX}/scripts/rvm
 rvm install ${VERSION} --movable
 
+ls -la /rubies
+ls -la /rubies/*/
+ls -la /rubies/*/bin
+
 rm /etc/rvmrc
 rm /etc/profile.d/rvm.sh
