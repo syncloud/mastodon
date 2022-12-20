@@ -1,6 +1,6 @@
 ARG VERSION
 FROM ruby:$VERSION
-COPY mastodon /
+COPY mastodon /mastodon
 WORKDIR /mastodon
 RUN apt update
 RUN apt install -y git imagemagick ffmpeg libpq-dev libxml2-dev libxslt1-dev file git-core \
