@@ -4,5 +4,6 @@ LIBS=$(echo ${DIR}/lib/*-linux-gnu*)
 LIBS=$LIBS:$(echo ${DIR}/lib/*-linux-gnu*)
 LIBS=$LIBS:$(echo ${DIR}/usr/lib/*-linux-gnu*)
 LIBS=$LIBS:$(echo ${DIR}/usr/local/lib)
-${DIR}/lib*/*-linux*/ld-*.so --library-path $LIBS ${DIR}/current/bin/ruby "$@"
+PRELOAD=$(echo ${DIR}/usr/lib/*-linux-gnu*/libjemalloc.so)
+${DIR}/lib*/*-linux*/ld-*.so --preload $PRELOAD --library-path $LIBS ${DIR}/current/bin/ruby "$@"
 
