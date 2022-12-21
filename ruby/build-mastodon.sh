@@ -21,3 +21,5 @@ bundle install -j$(getconf _NPROCESSORS_ONLN)
 apt remove -y git-core g++ gcc autoconf build-essential
 apt autoremove -y
 rm -rf /var/lib/apt/lists/*
+
+sed -i '1s@^@#!/snap/mastodon/current/ruby/bin/ruby.sh\n@' /current/bin/bundle

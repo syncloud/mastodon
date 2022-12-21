@@ -19,7 +19,6 @@ source ${PREFIX}/scripts/rvm
 rvm install ${VERSION} --movable
 
 mv /build/rubies/ruby-* /current
-sed -i '1s@^@#!/snap/mastodon/current/ruby/bin/ruby.sh\n@' /current/bin/bundle
 
 rm /etc/rvmrc
 rm /etc/profile.d/rvm.sh
