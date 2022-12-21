@@ -47,7 +47,8 @@ local build(arch, test_ui, dind) = [{
             name: "ruby test",
             image: "debian:buster-slim",
             commands: [
-                "./snap/ruby/current/bin/ruby.sh -e 'puts Hello'"
+                "build/snap/ruby/current/bin/ruby.sh -e 'puts Hello'",
+                "build/snap/ruby/current/bin/bundle.sh version"
             ]
         },
         {
