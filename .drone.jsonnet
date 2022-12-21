@@ -47,8 +47,8 @@ local build(arch, test_ui, dind) = [{
             name: "ruby test",
             image: "debian:buster-slim",
             commands: [
-                "build/snap/ruby/current/bin/ruby.sh -e 'puts Hello'",
-                "build/snap/ruby/current/bin/bundle.sh version"
+                "build/snap/ruby/bin/ruby.sh -e 'puts Hello'",
+                "build/snap/ruby/bin/bundle.sh version"
             ]
         },
         {
@@ -354,4 +354,3 @@ local build(arch, test_ui, dind) = [{
 build("amd64", true, "20.10.21-dind") +
 build("arm64", false, "19.03.8-dind") +
 build("arm", false, "19.03.8-dind")
-
