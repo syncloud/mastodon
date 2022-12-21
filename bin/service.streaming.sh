@@ -3,6 +3,7 @@
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )
 
 cd $DIR/ruby/mastodon
+. /var/snap/mastodon/current/config/.env.production
 export RAILS_ENV=production
 export SOCKET=/var/snap/mastodon/common/web.socket
 export LD_PRELOAD=libjemalloc.so
