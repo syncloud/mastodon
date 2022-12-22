@@ -23,3 +23,4 @@ apt autoremove -y
 rm -rf /var/lib/apt/lists/*
 
 sed -i '1s@^@#!/snap/mastodon/current/ruby/bin/ruby.sh\n@' /current/bin/bundle
+sed -i '1s@^@#!/snap/mastodon/current/ruby/bin/ruby.sh\n@' vendor/bundle/ruby/*/bin/*
