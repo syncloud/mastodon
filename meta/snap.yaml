@@ -6,12 +6,12 @@ apps:
     restart-condition: always
     start-timeout: 200s
 
-  streaming:
-    user: mastodon
-    command: bin/service.streaming.sh
-    daemon: simple
-    restart-condition: always
-    start-timeout: 200s
+#  streaming:
+#    user: mastodon
+#    command: bin/service.streaming.sh
+#    daemon: simple
+#    restart-condition: always
+#    start-timeout: 200s
 
   sidekiq:
     user: mastodon
