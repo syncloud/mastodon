@@ -57,7 +57,8 @@ class Installer:
             'log_path': log_path,
             'app_url': urls.get_app_url(APP_NAME),
             'app_domain': urls.get_app_domain_name(APP_NAME),
-            'web_secret': uuid.uuid4().hex,
+            'secret': uuid.uuid4().hex,
+            'secret_base': uuid.uuid4().hex,
             'disable_registration': False
         }
         gen.generate_files(app_config_dir, self.config_dir, variables)
