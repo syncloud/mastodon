@@ -2,9 +2,10 @@
 
 DIR=$( cd "$( dirname "$0" )" && pwd )
 cd ${DIR}
-VERSION=$1
+RUBY=$1
+NODE=$2
 BUILD_DIR=${DIR}/../build/snap/ruby
-docker build --build-arg VERSION=$VERSION -t syncloud .
+docker build --build-arg RUBY=$RUBY --build-arg NODE=$NODE -t syncloud .
 docker create --name=syncloud syncloud
 mkdir -p ${BUILD_DIR}
 cd ${BUILD_DIR}

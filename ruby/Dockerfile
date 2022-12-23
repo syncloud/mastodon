@@ -1,8 +1,8 @@
-FROM debian:bookworm-slim
+ARG NODE
+FROM node:$NODE
 COPY mastodon /mastodon
 COPY build-ruby.sh /
 COPY build-mastodon.sh /
-ARG VERSION
-RUN /build-ruby.sh $VERSION
+ARG RUBY
+RUN /build-ruby.sh $RUBY
 RUN /build-mastodon.sh
-

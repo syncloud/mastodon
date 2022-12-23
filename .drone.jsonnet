@@ -34,7 +34,7 @@ local build(arch, test_ui, dind) = [{
             name: "ruby",
             image: "docker:" + dind,
             commands: [
-                "./ruby/build.sh " + ruby
+                "./ruby/build.sh " + ruby + " " + node
             ],
             volumes: [
                 {
