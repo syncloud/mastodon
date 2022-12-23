@@ -18,6 +18,7 @@ bundle config deployment 'true'
 bundle config without 'development test'
 bundle install -j$(getconf _NPROCESSORS_ONLN)
 npm install --global yarn
+yarn install --pure-lockfile
 RAILS_ENV=production OTP_SECRET=1 SECRET_KEY_BASE=2 bundle exec rake assets:precompile
              
 apt remove -y git-core g++ gcc autoconf build-essential nodejs npm
