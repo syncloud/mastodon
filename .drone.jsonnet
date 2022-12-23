@@ -56,7 +56,8 @@ local build(arch, test_ui, dind) = [{
             commands: [
                 "cd build/snap/ruby/mastodon",
                 "apt update",
-                "apt install -y python3-dev",
+                "apt install -y python3-dev ruby",
+                "RAILS_ENV=production OTP_SECRET=1 SECRET_KEY_BASE=2 bundle exec rake assets:precompile",
                 "yarn install --pure-lockfile",
                 "ls -la"
             ]

@@ -17,10 +17,7 @@ cd /mastodon
 bundle config deployment 'true'
 bundle config without 'development test'
 bundle install -j$(getconf _NPROCESSORS_ONLN)
-export RAILS_ENV=production
-export OTP_SECRET=1
-export SECRET_KEY_BASE=2
-bundle exec rake assets:precompile 
+
 apt remove -y git-core g++ gcc autoconf build-essential
 apt autoremove -y
 rm -rf /var/lib/apt/lists/*
