@@ -18,6 +18,7 @@ bundle config deployment 'true'
 bundle config without 'development test'
 bundle install -j$(getconf _NPROCESSORS_ONLN)
 export RAILS_ENV=production
+export OTP_SECRET=1
 bundle exec rake assets:precompile 
 apt remove -y git-core g++ gcc autoconf build-essential
 apt autoremove -y
