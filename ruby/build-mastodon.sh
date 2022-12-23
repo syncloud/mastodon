@@ -17,7 +17,7 @@ cd /mastodon
 bundle config deployment 'true'
 bundle config without 'development test'
 bundle install -j$(getconf _NPROCESSORS_ONLN)
-
+rake assets:precompile 
 apt remove -y git-core g++ gcc autoconf build-essential
 apt autoremove -y
 rm -rf /var/lib/apt/lists/*
