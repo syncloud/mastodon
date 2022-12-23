@@ -1,4 +1,4 @@
-FROM debian:bullseye-slim
+FROM debian:booksworm-slim
 COPY mastodon /mastodon
 COPY build-ruby.sh /
 COPY build-mastodon.sh /
