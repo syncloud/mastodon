@@ -4,7 +4,7 @@ local go = "1.18.5";
 local postgresql = "15-bullseye";
 local ruby = "3.0.4";
 local python = "3.8-slim-buster";
-local node = "16.19.0-bullseye-slim";
+local node = "16.19.0-buster-slim";
 local mastodon = "4.0.2";
 
 local build(arch, test_ui, dind) = [{
