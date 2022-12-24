@@ -47,20 +47,10 @@ local build(arch, test_ui, dind) = [{
             name: "ruby test",
             image: "debian:buster-slim",
             commands: [
-                "build/snap/ruby/bin/ruby.sh -e 'puts \"Hello\"'"
+                "ruby/test.sh"
             ]
         },
-        {
-            name: "web",
-            image: "node:" + node,
-            commands: [
-                "cd build/snap/ruby/mastodon",
-                "apt update",
-                "apt install -y python3-dev",
-                "yarn install --pure-lockfile",
-                "ls -la"
-            ]
-        },
+
         {
             name: "postgresql",
             image: "docker:" + dind,
@@ -86,32 +76,6 @@ local build(arch, test_ui, dind) = [{
             image: "docker:" + dind,
             commands: [
                 "./python/build.sh " + python
-            ],
-            volumes: [
-                {
-                    name: "dockersock",
-                    path: "/var/run"
-                }
-            ]
-        },
-        {
-            name: "node",
-            image: "docker:" + dind,
-            commands: [
-                "./node/build.sh " + node
-            ],
-            volumes: [
-                {
-                    name: "dockersock",
-                    path: "/var/run"
-                }
-            ]
-        },
-        {
-            name: "node test",
-            image: "debian:buster-slim",
-            commands: [
-                "./node/test.sh"
             ],
             volumes: [
                 {
