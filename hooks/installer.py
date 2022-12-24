@@ -36,6 +36,7 @@ class Installer:
         self.log = logger.get_logger(APP_NAME)
         self.config_dir = join(self.data_dir, 'config')
         self.db = Database(self.app_dir, self.data_dir, self.config_dir, join(self.app_dir, PSQL_PATH), DB_USER, self.database_path, PSQL_PORT)
+        self.rails = join(self.app_dir, 'ruby', 'mastodon', 'bin', 'rails')
 
     def init_config(self):
         home_folder = join(self.common_dir, USER_NAME)
@@ -93,6 +94,8 @@ class Installer:
     def upgrade(self):
         self.log.info('upgrade')
         self.db.restore()
+        check_output([self.rails, 'db:setup'])
+        check_output([self.rails, 'db:migrate'])
 
     def initialize(self):
         self.log.info('initialize')
@@ -100,7 +103,7 @@ class Installer:
         self.log.info('creating database')
         self.db.execute('postgres', "ALTER USER {0} WITH PASSWORD '{1}';".format(DB_USER, DB_PASS))
         self.db.execute('postgres', "CREATE DATABASE {0} WITH OWNER={1};".format(DB_NAME, DB_USER))
-
+        check_output([self.rails, 'db:migrate'])
         with open(install_file, 'w') as f:
             f.write('installed\n')
 

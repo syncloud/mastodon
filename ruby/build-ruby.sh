@@ -19,5 +19,6 @@ rvm install ${VERSION} --movable
 
 mv /build/rubies/ruby-* /current
 rm -rf /build
+rm -rf /tmp/*
 rm /etc/rvmrc
 rm /etc/profile.d/rvm.sh
