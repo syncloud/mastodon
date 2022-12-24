@@ -20,7 +20,8 @@ bundle install -j$(getconf _NPROCESSORS_ONLN)
 
 yarn install --pure-lockfile
 RAILS_ENV=production OTP_SECRET=1 SECRET_KEY_BASE=2 bundle exec rake assets:precompile
-             
+yarn cache clean
+npm cache clean --force  
 apt remove -y git-core g++ gcc autoconf build-essential
 apt autoremove -y
 rm -rf /var/lib/apt/lists/*
