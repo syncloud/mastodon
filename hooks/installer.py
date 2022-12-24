@@ -1,6 +1,7 @@
 import logging
 import shutil
 import time
+from os import environ
 import uuid
 from os import path
 from os.path import isdir, join
@@ -37,6 +38,7 @@ class Installer:
         self.config_dir = join(self.data_dir, 'config')
         self.db = Database(self.app_dir, self.data_dir, self.config_dir, join(self.app_dir, PSQL_PATH), DB_USER, self.database_path, PSQL_PORT)
         self.rails = join(self.app_dir, 'ruby', 'mastodon', 'bin', 'rails')
+        environ['RAILS_ENV'] = 'production'
 
     def init_config(self):
         home_folder = join(self.common_dir, USER_NAME)
