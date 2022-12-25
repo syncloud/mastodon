@@ -4,6 +4,12 @@ DIR=$( cd "$( dirname "$0" )" && pwd )
 cd ${DIR}
 VERSION=$1
 BUILD_DIR=${DIR}/../build/snap/redis
+
+while ! docker ps; do
+    echo "waiting for docker"
+    sleep 2
+done
+
 docker build --build-arg VERSION=$VERSION -t syncloud .
 docker run syncloud redis-server -v
 docker create --name=redis syncloud
