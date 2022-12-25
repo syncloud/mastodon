@@ -25,7 +25,6 @@ DB_NAME = APP_NAME
 
 logger.init(logging.DEBUG, console=True, line_format='%(message)s')
 
-install_file = join(paths.get_data_dir(APP_NAME), 'installed')
 
 
 class Installer:
@@ -39,6 +38,7 @@ class Installer:
         self.db = Database(self.app_dir, self.data_dir, self.config_dir, join(self.app_dir, PSQL_PATH), DB_USER, self.database_path, PSQL_PORT)
         self.mastodon_dir = join(self.app_dir, 'ruby', 'mastodon')
         self.rails = join(self.mastodon_dir, 'bin', 'rails')
+        self.install_file = join(self.common_dir, 'installed')
         environ['RAILS_ENV'] = 'production'
 
     def init_config(self):
@@ -85,7 +85,7 @@ class Installer:
         self.db.init_config()
 
     def installed(self):
-        return path.isfile(install_file)
+        return path.isfile(self.install_file)
 
     def configure(self):
         self.log.info('configure')
@@ -98,6 +98,7 @@ class Installer:
         self.log.info('upgrade')
         self.db.restore()
         check_output([self.rails, 'db:migrate'], cwd=self.mastodon_dir)
+        self.update_db_version()
 
     def initialize(self):
         self.log.info('initialize')
@@ -107,8 +108,12 @@ class Installer:
         self.db.execute('postgres', "CREATE DATABASE {0} WITH OWNER={1};".format(DB_NAME, DB_USER))
         check_output([self.rails, 'db:setup'], cwd=self.mastodon_dir)
         check_output([self.rails, 'db:migrate'], cwd=self.mastodon_dir)
-        with open(install_file, 'w') as f:
+        self.update_db_version()
+        with open(self.install_file, 'w') as f:
             f.write('installed\n')
+
+    def update_db_version(self):
+        shutil.copy(join(self.app_dir, 'version'), self.data_dir)
 
     def prepare_storage(self):
         storage.init_storage(APP_NAME, USER_NAME)
