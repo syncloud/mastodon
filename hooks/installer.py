@@ -125,7 +125,3 @@ class Installer:
 
     def restore_post_start(self):
         self.configure()
-    self.post_refresh()
-
-    def restore_post_start(self):
-        self.configure()
