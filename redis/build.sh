@@ -5,7 +5,7 @@ cd ${DIR}
 VERSION=$1
 BUILD_DIR=${DIR}/../build/snap/redis
 docker build --build-arg VERSION=$VERSION -t syncloud .
-docker run syncloud redis-server --help
+docker run syncloud redis-server -v
 docker create --name=syncloud syncloud
 mkdir -p ${BUILD_DIR}/bin
 cd ${BUILD_DIR}
