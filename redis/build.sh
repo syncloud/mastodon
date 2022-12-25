@@ -12,5 +12,5 @@ cd ${BUILD_DIR}
 docker export syncloud -o syncloud.tar
 tar xf syncloud.tar
 rm -rf syncloud.tar
-cp ${DIR}/* ${BUILD_DIR}/bin
+cp ${DIR}/bin/* ${BUILD_DIR}/bin
 rm -rf ${BUILD_DIR}/usr/src
