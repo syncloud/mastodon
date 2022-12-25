@@ -17,7 +17,8 @@ apps:
     before: [sidekiq]
 
   streaming:
-    user: mastodon#    command: bin/service.streaming.sh
+    user: mastodon
+    command: bin/service.streaming.sh
     daemon: simple
     restart-condition: always
     start-timeout: 200s
