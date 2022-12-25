@@ -9,10 +9,10 @@ BUILD_DIR=${DIR}/../build/snap/ruby
 apk add libseccomp
 
 docker build --build-arg RUBY=$RUBY --build-arg NODE=$NODE -t syncloud .
-docker create --name=syncloud syncloud
+docker create --name=ruby syncloud
 mkdir -p ${BUILD_DIR}
 cd ${BUILD_DIR}
-docker export syncloud -o syncloud.tar
+docker export ruby -o syncloud.tar
 tar xf syncloud.tar
 rm -rf syncloud.tar
 cp ${DIR}/bin/* ${BUILD_DIR}/bin
