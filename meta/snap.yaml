@@ -5,6 +5,16 @@ apps:
     daemon: forking
     restart-condition: always
     start-timeout: 200s
+  redis:
+    user: mastodon
+    command: bin/service.redis.sh
+    daemon: simple
+    plugs:
+    - network
+    - network-bind
+    restart-condition: always
+    start-timeout: 600s
+    before: [sidekiq]
 
 #  streaming:
 #    user: mastodon

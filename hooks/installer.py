@@ -46,8 +46,8 @@ class Installer:
         linux.useradd(USER_NAME, home_folder=home_folder)
 
         app_config_dir = join(self.app_dir, 'config')
-        log_path = join(self.common_dir, 'log')
-        fs.makepath(log_path)
+        fs.makepath(join(self.data_dir, 'redis'))
+
         storage_dir = storage.init_storage(APP_NAME, USER_NAME)
         variables = {
             'app_dir': self.app_dir,
@@ -58,7 +58,7 @@ class Installer:
             'db_user': DB_USER,
             'db_password': DB_PASS,
             'storage_dir': storage_dir,
-            'log_path': log_path,
+            'data_dir': self.data_dir,
             'app_url': urls.get_app_url(APP_NAME),
             'app_domain': urls.get_app_domain_name(APP_NAME),
             'secret': uuid.uuid4().hex,
@@ -97,7 +97,6 @@ class Installer:
     def upgrade(self):
         self.log.info('upgrade')
         self.db.restore()
-        check_output([self.rails, 'db:setup'], cwd=self.mastodon_dir)
         check_output([self.rails, 'db:migrate'], cwd=self.mastodon_dir)
 
     def initialize(self):
@@ -106,6 +105,7 @@ class Installer:
         self.log.info('creating database')
         self.db.execute('postgres', "ALTER USER {0} WITH PASSWORD '{1}';".format(DB_USER, DB_PASS))
         self.db.execute('postgres', "CREATE DATABASE {0} WITH OWNER={1};".format(DB_NAME, DB_USER))
+        check_output([self.rails, 'db:setup'], cwd=self.mastodon_dir)
         check_output([self.rails, 'db:migrate'], cwd=self.mastodon_dir)
         with open(install_file, 'w') as f:
             f.write('installed\n')
@@ -122,6 +122,10 @@ class Installer:
 
     def restore_pre_start(self):
         self.post_refresh()
+
+    def restore_post_start(self):
+        self.configure()
+    self.post_refresh()
 
     def restore_post_start(self):
         self.configure()

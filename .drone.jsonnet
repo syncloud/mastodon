@@ -5,6 +5,7 @@ local postgresql = "15-bullseye";
 local ruby = "3.0.4";
 local python = "3.8-slim-buster";
 local node = "16.19.0-buster-slim";
+local redis = "7.0.7-bullseye";
 local mastodon = "4.0.2";
 
 local build(arch, test_ui, dind) = [{
@@ -30,6 +31,27 @@ local build(arch, test_ui, dind) = [{
 	        "./download.sh " + mastodon
             ]
 	}, 
+        {
+            name: "redis",
+            image: "docker:" + dind,
+            commands: [
+                "./redis/build.sh " + redis
+            ],
+            volumes: [
+                {
+                    name: "dockersock",
+                    path: "/var/run"
+                }
+            ]
+        },
+        {
+            name: "redis test",
+            image: "debian:buster-slim",
+            commands: [
+                "./redis/test.sh"
+            ]
+        },
+  
         {
             name: "ruby",
             image: "docker:" + dind,
