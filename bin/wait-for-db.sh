@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 retry=0
 retries=100
@@ -11,4 +11,3 @@ while diff /snap/mastodon/current/version /var/snap/mastodon/current/version; do
     echo "waiting for db $retry/$retries"
     sleep 2
 done
-

@@ -5,5 +5,5 @@ cd $DIR/ruby/mastodon
 export RAILS_ENV=production
 export DB_POOL=25
 export MALLOC_ARENA_MAX=2
-$DIR/wait-for-db.sh
+$DIR/bin/wait-for-db.sh
 exec $DIR/ruby/current/bin/bundle exec sidekiq -c 25
