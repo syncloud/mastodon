@@ -6,8 +6,6 @@ RUBY=$1
 NODE=$2
 BUILD_DIR=${DIR}/../build/snap/ruby
 
-apk add libseccomp
-
 docker build --build-arg RUBY=$RUBY --build-arg NODE=$NODE -t syncloud .
 docker create --name=ruby syncloud
 mkdir -p ${BUILD_DIR}
