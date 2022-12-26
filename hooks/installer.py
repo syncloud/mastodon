@@ -105,9 +105,7 @@ class Installer:
     def initialize(self):
         self.log.info('initialize')
 
-        self.log.info('creating database')
         self.db.execute('postgres', "ALTER USER {0} WITH PASSWORD '{1}';".format(DB_USER, DB_PASS))
-        self.db.execute('postgres', "CREATE DATABASE {0} WITH OWNER={1};".format(DB_NAME, DB_USER))
         check_output([self.rails, 'db:setup'], cwd=self.mastodon_dir)
         check_output([self.rails, 'db:migrate'], cwd=self.mastodon_dir)
         self.update_db_version()
