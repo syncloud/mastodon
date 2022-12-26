@@ -4,6 +4,9 @@ DIR=$( cd "$( dirname "$0" )" && pwd )
 DOWNLOAD_URL=https://github.com/syncloud/3rdparty/releases/download
 VERSION=$1
 ARCH=$(uname -m)
+
+apk add patch
+
 rm -rf ${DIR}/build
 BUILD_DIR=${DIR}/build/snap
 mkdir -p ${BUILD_DIR}
