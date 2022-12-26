@@ -7,6 +7,9 @@ import time
 def login(selenium, device_user, device_password):
 
     selenium.open_app()
+    signin = selenium.find_by_xpath("//span[text()='Sign in']")
+    selenium.screenshot('index')
+    signin.click()
     user = selenium.find_by_id("user_name")
     user.send_keys(device_user)
     password = selenium.find_by_id("password")
@@ -16,3 +19,4 @@ def login(selenium, device_user, device_password):
 
     time.sleep(2)
     selenium.screenshot('main')
+
