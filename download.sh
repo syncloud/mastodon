@@ -18,7 +18,7 @@ cd ${DIR}/ruby
 wget https://github.com/mastodon/mastodon/archive/refs/tags/v$VERSION.tar.gz
 tar xf v$VERSION.tar.gz
 mv mastodon-$VERSION mastodon
-cd mastadon
+cd mastodon
 for f in ${DIR}/patch/*
 do
   patch -p1 < $f
