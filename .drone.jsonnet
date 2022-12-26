@@ -4,11 +4,10 @@ local go = "1.18.5";
 local postgresql = "15-bullseye";
 local ruby = "3.0.4";
 local python = "3.8-slim-buster";
-local node = "16.19.0-buster-slim";
 local redis = "7.0.7-bullseye";
 local mastodon = "4.0.2";
 
-local build(arch, test_ui, dind) = [{
+local build(arch, test_ui, dind, node) = [{
     kind: "pipeline",
     type: "docker",
     name: arch,
@@ -336,6 +335,6 @@ local build(arch, test_ui, dind) = [{
      }
 ];
 
-build("amd64", true, "20.10.21-dind") +
-build("arm64", false, "19.03.8-dind") +
-build("arm", false, "19.03.8-dind")
+build("amd64", true, "20.10.21-dind", "16.19.0-bullseye-slim") +
+build("arm64", false, "19.03.8-dind", "16.19.0-bullseye-slim") +
+build("arm", false, "19.03.8-dind", "16.19.0-buster-slim")
