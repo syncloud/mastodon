@@ -67,6 +67,9 @@ apps:
   pgdumpall:
     command: bin/pg_dumpall.sh
 
+  tootctl:
+    command: bin/tootctl.sh
+
 confinement: strict
 description: Mastodon
 grade: stable
