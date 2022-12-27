@@ -42,12 +42,12 @@ def test_publish(selenium):
 
 def test_profile(selenium):
     selenium.find_by_xpath("//a[@title='user']").click()
-    selenium.find_by_xpath("//span[text()='Edit profile']").click()
+    selenium.find_by_xpath("//button[text()='Edit profile']").click()
     file = selenium.find_by_xpath('input[type="file"]')
     #driver.execute_script("arguments[0].removeAttribute('style')", file)
     selenium.screenshot('profile-file')
     file.send_keys(join(DIR, 'images', 'profile.jpeg'))
-    selenium.find_by_xpath("//span[text()='Save changes']").click()
+    selenium.find_by_xpath("//button[text()='Save changes']").click()
     selenium.screenshot('profile')
 
 def test_teardown(driver):
