@@ -33,6 +33,7 @@ def test_login(selenium, device_user, device_password):
     lib.login(selenium, device_user, device_password)
 
 def test_publish(selenium):
+    selenium.find_by_xpath("//span[text()='Done']").click()
     selenium.find_by_xpath("//span[text()='Publish']").click()
     selenium.find_by_xpath("//label/textarea").send_keys("test post")
     selenium.find_by_xpath("//button[text()='Publish!']").click()
