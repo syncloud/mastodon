@@ -81,16 +81,20 @@ def test_access_change_event(device):
     device.run_ssh('snap run mastodon.access-change > {0}/access-change.log'.format(TMP_DIR))
 
 
-# def test_backup_restore(device, artifact_dir):
-#     app_log_dir = join(artifact_dir, 'app')
-#     device.run_ssh("snap run platform.cli backup create mastodon")
-#     response = device.run_ssh("snap run platform.cli backup list")
-#     open('{0}/cli.backup.list.json'.format(app_log_dir), 'w').write(response)
-#     print(response)
-#     backup = json.loads(response)[0]
-#     device.run_ssh('tar tvf {0}/{1}'.format(backup['path'], backup['file']))
-#     device.run_ssh("snap run platform.cli backup restore {0}".format(backup['file']))
+def test_access_change_event(device):
+    device.run_ssh('snap run mastodon.tootctl > {0}/tootctl.log'.format(TMP_DIR))
 
 
-# def test_reinstall(app_archive_path, app_domain, device_password):
-#     local_install(app_domain, device_password, app_archive_path)
+def test_backup_restore(device, artifact_dir):
+    app_log_dir = join(artifact_dir, 'app')
+    device.run_ssh("snap run platform.cli backup create mastodon")
+    response = device.run_ssh("snap run platform.cli backup list")
+    open('{0}/cli.backup.list.json'.format(app_log_dir), 'w').write(response)
+    print(response)
+    backup = json.loads(response)[0]
+    device.run_ssh('tar tvf {0}/{1}'.format(backup['path'], backup['file']))
+    device.run_ssh("snap run platform.cli backup restore {0}".format(backup['file']))
+
+
+def test_reinstall(app_archive_path, app_domain, device_password):
+    local_install(app_domain, device_password, app_archive_path)
