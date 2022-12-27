@@ -6,7 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from syncloudlib.integration.hosts import add_host_alias
 from subprocess import check_output, CalledProcessError, STDOUT
 from integration import lib
-
+import time
 DIR = dirname(__file__)
 
 
@@ -43,7 +43,8 @@ def test_publish(selenium):
 def test_profile(selenium):
     selenium.find_by_xpath("//a[@title='user']").click()
     selenium.find_by_xpath("//button[text()='Edit profile']").click()
-    file = selenium.find_by_xpath('input[type="file"]')
+    timw.sleep(5)
+    file = selenium.find_by_xpath('//input[@type="file"]')
     #driver.execute_script("arguments[0].removeAttribute('style')", file)
     selenium.screenshot('profile-file')
     file.send_keys(join(DIR, 'images', 'profile.jpeg'))
