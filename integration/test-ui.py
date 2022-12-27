@@ -32,6 +32,9 @@ def test_start(module_setup, app, domain, device_host, device):
 def test_login(selenium, device_user, device_password):
     lib.login(selenium, device_user, device_password)
 
+def test_publish(selenium):
+    selenium.find_by_xpath("//span[text()='Publish']").click()
+    selenium.find_by_id("message").send_keys("test post")
 
 def test_teardown(driver):
     driver.quit()
