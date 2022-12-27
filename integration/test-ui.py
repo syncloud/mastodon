@@ -42,8 +42,9 @@ def test_publish(selenium):
 
 def test_profile(selenium):
     selenium.find_by_xpath("//a[@title='user']").click()
-    selenium.find_by_xpath("//button[text()='Edit profile']").click()
-    time.sleep(5)
+    #selenium.find_by_xpath("//button[text()='Edit profile']").click()
+    selenium.open_app("/settings/profile")
+    #time.sleep(5)
     file = selenium.find_by_xpath('//input[@type="file"]')
     #driver.execute_script("arguments[0].removeAttribute('style')", file)
     selenium.screenshot('profile-file')
