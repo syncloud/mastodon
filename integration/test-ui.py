@@ -34,7 +34,7 @@ def test_login(selenium, device_user, device_password):
 
 def test_publish(selenium):
     done = "//span[text()='Done']"
-    if selenium.exists_by(By.XPATH, done)
+    if selenium.exists_by(By.XPATH, done):
         selenium.find_by_xpath(done).click()
     selenium.find_by_xpath("//span[text()='Publish']").click()
     selenium.find_by_xpath("//label/textarea").send_keys("test post")
