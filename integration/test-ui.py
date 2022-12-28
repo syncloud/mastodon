@@ -51,7 +51,7 @@ def test_profile(selenium):
     selenium.screenshot('profile-file')
     selenium.find_by_xpath("//button[text()='Save changes']").click()   
     selenium.screenshot('profile-saved')
-    selenium.find_by_xpath("//a[text()='Back to Mastodon']").click()
+    selenium.find_by_xpath("//img[@alt='Mastodon']").click()
     selenium.find_by_xpath("//span[text()='Publish']")
     selenium.screenshot('posts')
 
