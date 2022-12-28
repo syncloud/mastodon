@@ -55,7 +55,7 @@ def test_profile(selenium, ui_mode):
     selenium.screenshot('profile-saved')
     if ui_mode == "mobile":
         selenium.find_by_xpath("//a[@aria-label='Toggle menu']").click()
-    selenium.find_by_xpath("//img[@alt='Mastodon']").click()
+    selenium.find_by_xpath("//a[text()='Back to Mastodon']").click()
     selenium.find_by_xpath("//span[text()='Publish']")
     selenium.screenshot('posts')
 
