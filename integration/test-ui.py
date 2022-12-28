@@ -47,10 +47,11 @@ def test_profile(selenium):
     #time.sleep(5)
     file = selenium.find_by_xpath('//input[@type="file"]')
     #driver.execute_script("arguments[0].removeAttribute('style')", file)
-    selenium.screenshot('profile-file')
     file.send_keys(join(DIR, 'images', 'profile.jpeg'))
+    selenium.screenshot('profile-file')
     selenium.find_by_xpath("//button[text()='Save changes']").click()
-    selenium.screenshot('profile')
+    selenium.find_by_xpath("//button[text()='Edit profile']")
+    selenium.screenshot('profile-saved')
 
 def test_teardown(driver):
     driver.quit()
