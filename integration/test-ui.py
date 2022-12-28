@@ -49,9 +49,11 @@ def test_profile(selenium):
     #driver.execute_script("arguments[0].removeAttribute('style')", file)
     file.send_keys(join(DIR, 'images', 'profile.jpeg'))
     selenium.screenshot('profile-file')
-    selenium.find_by_xpath("//button[text()='Save changes']").click()
-    selenium.find_by_xpath("//button[text()='Edit profile']")
+    selenium.find_by_xpath("//button[text()='Save changes']").click()   
     selenium.screenshot('profile-saved')
+    selenium.find_by_xpath("//a[text()='Back to Mastodon']").click()
+    selenium.find_by_xpath("//span[text()='Publish']")
+    selenium.screenshot('posts')
 
 def test_teardown(driver):
     driver.quit()
