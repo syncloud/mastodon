@@ -42,7 +42,7 @@ def test_publish(selenium):
     selenium.find_by_xpath("//*[text()='test post']")
     selenium.screenshot('publish')
 
-def test_profile(selenium):
+def test_profile(selenium, ui_mode):
     selenium.find_by_xpath("//a[@title='user']").click()
     #selenium.find_by_xpath("//button[text()='Edit profile']").click()
     selenium.open_app("/settings/profile")
@@ -53,6 +53,8 @@ def test_profile(selenium):
     selenium.screenshot('profile-file')
     selenium.find_by_xpath("//button[text()='Save changes']").click()   
     selenium.screenshot('profile-saved')
+    if ui_mode == "mobile":
+        selenium.find_by_xpath("//a[@aria-label='Toggle menu']").click()
     selenium.find_by_xpath("//img[@alt='Mastodon']").click()
     selenium.find_by_xpath("//span[text()='Publish']")
     selenium.screenshot('posts')
