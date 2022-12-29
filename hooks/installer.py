@@ -42,6 +42,8 @@ class Installer:
         environ['RAILS_ENV'] = 'production'
 
     def init_config(self):
+        with open(join(self.common_dir, 'list.log'), 'w') as f:
+            f.write(check_output('ls -la', cwd=self.common_dir, shell=True))
         home_folder = join(self.common_dir, USER_NAME)
         linux.useradd(USER_NAME, home_folder=home_folder)
 

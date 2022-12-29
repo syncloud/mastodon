@@ -39,6 +39,7 @@ def module_setup(request, data_dir, platform_data_dir, app_dir, device, artifact
         device.run_ssh('ls -la /var/snap/mastodon/common > {0}/var.snap.mastodon.common.ls.log'.format(TMP_DIR), throw=False)
         device.run_ssh('ls -la /data > {0}/data.ls.log'.format(TMP_DIR), throw=False)
         device.run_ssh('ls -la /data/mastodon > {0}/data.mastodon.ls.log'.format(TMP_DIR), throw=False)
+        device.run_ssh('cp /var/snap/mastodon/common/list.log {0}/common.list.log'.format(TMP_DIR), throw=False)
 
         app_log_dir = join(artifact_dir, 'app')
         device.scp_from_device('{0}/log/*.log'.format(data_dir), app_log_dir)
