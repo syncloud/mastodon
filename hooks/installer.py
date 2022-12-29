@@ -17,7 +17,6 @@ from database import Database
 APP_NAME = 'mastodon'
 USER_NAME = APP_NAME
 PSQL_PATH = 'postgresql/bin/psql.sh'
-PSQL_DATA_PATH = 'database'
 PSQL_PORT = 5434
 DB_USER = APP_NAME
 DB_PASS = APP_NAME
@@ -32,18 +31,16 @@ class Installer:
         self.app_dir = paths.get_app_dir(APP_NAME)
         self.common_dir = paths.get_data_dir(APP_NAME)
         self.data_dir = join('/var/snap', APP_NAME, 'current')
-        self.database_path = join(self.common_dir, PSQL_DATA_PATH)
         self.log = logger.get_logger(APP_NAME)
         self.config_dir = join(self.data_dir, 'config')
-        self.db = Database(self.app_dir, self.data_dir, self.config_dir, join(self.app_dir, PSQL_PATH), DB_USER, self.database_path, PSQL_PORT)
+        self.db = Database(self.app_dir, self.data_dir, self.config_dir, join(self.app_dir, PSQL_PATH), DB_USER, PSQL_PORT)
         self.mastodon_dir = join(self.app_dir, 'ruby', 'mastodon')
         self.rails = join(self.mastodon_dir, 'bin', 'rails')
         self.install_file = join(self.common_dir, 'installed')
         environ['RAILS_ENV'] = 'production'
 
     def init_config(self):
-        home_folder = join(self.common_dir, USER_NAME)
-        linux.useradd(USER_NAME, home_folder=home_folder)
+        linux.useradd(USER_NAME)
 
         app_config_dir = join(self.app_dir, 'config')
         fs.makepath(join(self.data_dir, 'redis'))
@@ -54,7 +51,7 @@ class Installer:
         variables = {
             'app_dir': self.app_dir,
             'common_dir': self.common_dir,
-            'database_dir': self.database_path,
+            'database_dir': self.db.database_dir,
             'db_psql_port': PSQL_PORT,
             'db_name': DB_NAME,
             'db_user': DB_USER,
@@ -72,9 +69,11 @@ class Installer:
         fs.chownpath(self.data_dir, USER_NAME, recursive=True)
 
     def install(self):
+        self.log_common('before.install')
         self.init_config()
         self.db.init()
         self.db.init_config()
+        self.log_common('after.install')
 
     def pre_refresh(self):
         self.db.backup()
@@ -90,11 +89,13 @@ class Installer:
         return path.isfile(self.install_file)
 
     def configure(self):
+        self.log_common('before.configure')
         self.log.info('configure')
         if self.installed():
             self.upgrade()
         else:
             self.initialize()
+        self.log_common('after.configure')
 
     def upgrade(self):
         self.log.info('upgrade')
@@ -130,3 +131,7 @@ class Installer:
 
     def restore_post_start(self):
         self.configure()
+
+    def log_common(self, name):
+        with open(join(self.common_dir, '{0}.log'.format(name)), 'w') as f:
+            f.write(str(check_output('ls -la', cwd=self.common_dir, shell=True)))

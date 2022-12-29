@@ -39,6 +39,7 @@ def module_setup(request, data_dir, platform_data_dir, app_dir, device, artifact
         device.run_ssh('ls -la /var/snap/mastodon/common > {0}/var.snap.mastodon.common.ls.log'.format(TMP_DIR), throw=False)
         device.run_ssh('ls -la /data > {0}/data.ls.log'.format(TMP_DIR), throw=False)
         device.run_ssh('ls -la /data/mastodon > {0}/data.mastodon.ls.log'.format(TMP_DIR), throw=False)
+        device.run_ssh('cp /var/snap/mastodon/common/*.log {0}'.format(TMP_DIR), throw=False)
 
         app_log_dir = join(artifact_dir, 'app')
         device.scp_from_device('{0}/log/*.log'.format(data_dir), app_log_dir)
@@ -93,8 +94,7 @@ def test_backup_restore(device, artifact_dir):
     print(response)
     backup = json.loads(response)[0]
     device.run_ssh('tar tvf {0}/{1}'.format(backup['path'], backup['file']))
-    # todo: something is wrong with restoeing sym links
-    # device.run_ssh("snap run platform.cli backup restore {0}".format(backup['file']))
+    device.run_ssh("snap run platform.cli backup restore {0}".format(backup['file']))
 
 
 def test_reinstall(app_archive_path, app_domain, device_password):
