@@ -40,8 +40,9 @@ class Installer:
         environ['RAILS_ENV'] = 'production'
 
     def init_config(self):
-        linux.useradd(USER_NAME)
-
+        home_folder = join('/home', USER_NAME)
+        linux.useradd(USER_NAME, home_folder=home_folder)
+        
         app_config_dir = join(self.app_dir, 'config')
         fs.makepath(join(self.data_dir, 'redis'))
         fs.makepath(join(self.data_dir, 'nginx'))
