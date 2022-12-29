@@ -44,6 +44,19 @@ npm cache clean --force
 apt remove -y git-core g++ gcc autoconf build-essential
 apt autoremove -y
 rm -rf /var/lib/apt/lists/*
+rm -rf usr/lib/*/perl
+rm -rf usr/lib/*/perl-base
+rm -rf usr/lib/*/dri
+rm -rf usr/lib/*/mfx
+rm -rf usr/lib/*/vdpau
+rm -rf usr/lib/*/gconv
+rm -rf usr/lib/*/lapack
+rm -rf usr/lib/gcc
+rm -rf usr/lib/git-core
+rm -rf usr/share
+rm -rf tmp
+rm -rf node_modules/.cache
+
 
 ln -s /var/snap/mastodon/current/config/.env.production .env.production
 
