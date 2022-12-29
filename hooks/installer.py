@@ -42,8 +42,6 @@ class Installer:
         environ['RAILS_ENV'] = 'production'
 
     def init_config(self):
-        with open(join(self.common_dir, 'list.log'), 'w') as f:
-            f.write(str(check_output('ls -la', cwd=self.common_dir, shell=True)))
         home_folder = join(self.common_dir, USER_NAME)
         linux.useradd(USER_NAME, home_folder=home_folder)
 
@@ -74,9 +72,11 @@ class Installer:
         fs.chownpath(self.data_dir, USER_NAME, recursive=True)
 
     def install(self):
+        self.log_common('before.install')
         self.init_config()
         self.db.init()
         self.db.init_config()
+        self.log_common('after.install')
 
     def pre_refresh(self):
         self.db.backup()
@@ -92,11 +92,13 @@ class Installer:
         return path.isfile(self.install_file)
 
     def configure(self):
+        self.log_common('before.configure')
         self.log.info('configure')
         if self.installed():
             self.upgrade()
         else:
             self.initialize()
+        self.log_common('after.configure')
 
     def upgrade(self):
         self.log.info('upgrade')
@@ -132,3 +134,8 @@ class Installer:
 
     def restore_post_start(self):
         self.configure()
+
+    def log_common(self, name):
+        with open(join(self.common_dir, '{0}.log'.format(name)), 'w') as f:
+            f.write(str(check_output('ls -la', cwd=self.common_dir, shell=True)))
+    
