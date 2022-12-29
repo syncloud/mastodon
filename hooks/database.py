@@ -6,14 +6,14 @@ from syncloudlib import logger, fs
 
 class Database:
 
-    def __init__(self, app_dir, data_dir, config_dir, psql, user, database_path, port):
+    def __init__(self, app_dir, data_dir, config_dir, psql, user, port):
         self.log = logger.get_logger('database')
         self.app_dir = app_dir
         self.data_dir = data_dir
         self.config_dir = config_dir
         self.psql = psql
         self.user = user
-        self.database_dir = database_path
+        self.database_dir = join(self.data_dir, 'database')
         self.port = port
         self.postgresql_config = join(self.config_dir, 'postgresql.conf')
         self.backup_file = join(self.data_dir, 'database.dump')
