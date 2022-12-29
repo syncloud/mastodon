@@ -28,7 +28,6 @@ rm -rf usr/lib/*/gconv
 rm -rf usr/lib/*/lapack
 rm -rf usr/lib/gcc
 rm -rf usr/lib/git-core
-rm -rf usr/share
 
 cp $DIR/bin/* bin
 cp $DIR/pgbin/* $PGBIN
