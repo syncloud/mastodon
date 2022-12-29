@@ -19,7 +19,6 @@ PGBIN=$(echo usr/lib/postgresql/*/bin)
 mv $PGBIN/postgres $PGBIN/postgres.bin
 mv $PGBIN/pg_dump $PGBIN/pg_dump.bin
 rm -rf var
-rm -rf usr/lib/postgresql
 rm -rf usr/lib/*/perl
 rm -rf usr/lib/*/perl-base
 rm -rf usr/lib/*/dri
