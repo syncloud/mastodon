@@ -46,6 +46,7 @@ class Installer:
         fs.makepath(join(self.data_dir, 'redis'))
         fs.makepath(join(self.data_dir, 'nginx'))
         fs.makepath(join(self.data_dir, 'nginx', 'cache'))
+        fs.makepath(join(self.data_dir, 'system'))
 
         storage_dir = storage.init_storage(APP_NAME, USER_NAME)
         variables = {

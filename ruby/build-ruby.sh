@@ -57,9 +57,13 @@ rm -rf usr/share
 rm -rf tmp
 rm -rf node_modules/.cache
 
-
+cd /mastodon
 ln -s /var/snap/mastodon/current/config/.env.production .env.production
 
+cd public
+ln -s /var/snap/mastodon/current/system system
+
+cd /mastodon
 sed -i '1s@^@#!/snap/mastodon/current/ruby/bin/ruby.sh\n@' /current/bin/bundle
 sed -i '1s@^@#!/snap/mastodon/current/ruby/bin/ruby.sh\n@' vendor/bundle/ruby/*/bin/*
 sed -i '1s@^@#!/snap/mastodon/current/ruby/bin/ruby.sh\n@' bin/rails
