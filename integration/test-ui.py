@@ -7,6 +7,8 @@ from syncloudlib.integration.hosts import add_host_alias
 from subprocess import check_output, CalledProcessError, STDOUT
 from integration import lib
 import time
+from selenium.webdriver.support import expected_conditions as EC
+
 DIR = dirname(__file__)
 
 
@@ -39,7 +41,9 @@ def test_publish_text(selenium):
     time.sleep(2)
     selenium.find_by_xpath("//span[text()='Publish']").click()
     selenium.find_by_xpath("//label/textarea").send_keys("test post")
-    selenium.find_by_xpath("//button[text()='Publish!']").click()
+    publish = "//button[text()='Publish!']"
+    selenium.wait_driver.until(EC.element_to_be_clickable((By.XPATH, publish)))
+    selenium.find_by_xpath(publish).click()
     selenium.find_by_xpath("//*[text()='test post']")
     selenium.screenshot('publish-text')
 
@@ -50,7 +54,9 @@ def test_publish_image(selenium):
     file = selenium.driver.find_element(By.XPATH, '//input[@type="file"]')
     selenium.driver.execute_script("arguments[0].removeAttribute('style')", file)
     file.send_keys(join(DIR, 'images', 'profile.jpeg'))
-    selenium.find_by_xpath("//button[text()='Publish!']").click()
+    publish = "//button[text()='Publish!']"
+    selenium.wait_driver.until(EC.element_to_be_clickable((By.XPATH, publish)))
+    selenium.find_by_xpath(publish).click()
     selenium.find_by_xpath("//span[text()='Publish']")
     selenium.find_by_xpath("//*[text()='test image']")
     selenium.screenshot('publish-image')
@@ -62,7 +68,9 @@ def test_publish_video(selenium):
     file = selenium.driver.find_element(By.XPATH, '//input[@type="file"]')
     selenium.driver.execute_script("arguments[0].removeAttribute('style')", file)
     file.send_keys(join(DIR, 'videos', 'test.mp4'))
-    selenium.find_by_xpath("//button[text()='Publish!']").click()
+    publish = "//button[text()='Publish!']"
+    selenium.wait_driver.until(EC.element_to_be_clickable((By.XPATH, publish)))
+    selenium.find_by_xpath(publish).click()
     selenium.find_by_xpath("//*[text()='test video']")
     selenium.find_by_xpath("//span[text()='Publish']")
     selenium.screenshot('publish-video')
