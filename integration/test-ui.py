@@ -32,7 +32,7 @@ def test_start(module_setup, app, domain, device_host, device):
 def test_login(selenium, device_user, device_password):
     lib.login(selenium, device_user, device_password)
 
-def test_publish(selenium):
+def test_publish_text(selenium):
     done = "//span[text()='Done']"
     if selenium.exists_by(By.XPATH, done):
         selenium.find_by_xpath(done).click()
@@ -40,7 +40,26 @@ def test_publish(selenium):
     selenium.find_by_xpath("//label/textarea").send_keys("test post")
     selenium.find_by_xpath("//button[text()='Publish!']").click()
     selenium.find_by_xpath("//*[text()='test post']")
-    selenium.screenshot('publish')
+    selenium.screenshot('publish-text')
+
+def test_publish_image(selenium):
+    done = "//span[text()='Done']"
+    selenium.find_by_xpath("//span[text()='Publish']").click()
+    selenium.find_by_xpath("//label/textarea").send_keys("test image")
+    selenium.find_by_id('attach').send_keys(join(DIR, 'images', 'profile.jpeg'))
+    selenium.find_by_xpath("//button[text()='Publish!']").click()
+    selenium.find_by_xpath("//*[text()='test image']")
+    selenium.screenshot('publish-image')
+
+def test_publish_video(selenium):
+    done = "//span[text()='Done']"
+    selenium.find_by_xpath("//span[text()='Publish']").click()
+    selenium.find_by_xpath("//label/textarea").send_keys("test video")
+    selenium.find_by_id('attach').send_keys(join(DIR, 'videos', 'test.mp4'))
+    selenium.find_by_xpath("//button[text()='Publish!']").click()
+    selenium.find_by_xpath("//*[text()='test video']")
+    selenium.screenshot('publish-video')
+
 
 def test_profile(selenium, ui_mode):
     selenium.find_by_xpath("//a[@title='user']").click()
