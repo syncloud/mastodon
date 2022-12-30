@@ -46,7 +46,7 @@ def test_publish_image(selenium):
     done = "//span[text()='Done']"
     selenium.find_by_xpath("//span[text()='Publish']").click()
     selenium.find_by_xpath("//label/textarea").send_keys("test image")
-    selenium.find_by_xpath('//input[@type='file']').send_keys(join(DIR, 'images', 'profile.jpeg'))
+    selenium.find_by_xpath('//input[@type="file"]').send_keys(join(DIR, 'images', 'profile.jpeg'))
     selenium.find_by_xpath("//button[text()='Publish!']").click()
     selenium.find_by_xpath("//*[text()='test image']")
     selenium.screenshot('publish-image')
@@ -55,7 +55,7 @@ def test_publish_video(selenium):
     done = "//span[text()='Done']"
     selenium.find_by_xpath("//span[text()='Publish']").click()
     selenium.find_by_xpath("//label/textarea").send_keys("test video")
-    selenium.find_by_xpath('//input[@type='file']').send_keys(join(DIR, 'videos', 'test.mp4'))
+    selenium.find_by_xpath('//input[@type="file"]').send_keys(join(DIR, 'videos', 'test.mp4'))
     selenium.find_by_xpath("//button[text()='Publish!']").click()
     selenium.find_by_xpath("//*[text()='test video']")
     selenium.screenshot('publish-video')
