@@ -36,6 +36,7 @@ def test_publish_text(selenium):
     done = "//span[text()='Done']"
     if selenium.exists_by(By.XPATH, done):
         selenium.find_by_xpath(done).click()
+    time.sleep(2)
     selenium.find_by_xpath("//span[text()='Publish']").click()
     selenium.find_by_xpath("//label/textarea").send_keys("test post")
     selenium.find_by_xpath("//button[text()='Publish!']").click()
