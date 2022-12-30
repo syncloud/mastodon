@@ -43,18 +43,20 @@ yarn cache clean
 npm cache clean --force
 apt remove -y git-core g++ gcc autoconf build-essential
 apt autoremove -y
+
 rm -rf /var/lib/apt/lists/*
-rm -rf usr/lib/*/perl
-rm -rf usr/lib/*/perl-base
-rm -rf usr/lib/*/dri
-rm -rf usr/lib/*/mfx
-rm -rf usr/lib/*/vdpau
-rm -rf usr/lib/*/gconv
-rm -rf usr/lib/*/lapack
-rm -rf usr/lib/gcc
-rm -rf usr/lib/git-core
-rm -rf usr/share
-rm -rf tmp
+rm -rf /usr/lib/*/perl
+rm -rf /usr/lib/*/perl-base
+rm -rf /usr/lib/*/dri
+rm -rf /usr/lib/*/mfx
+rm -rf /usr/lib/*/vdpau
+rm -rf /usr/lib/*/gconv
+rm -rf /usr/lib/*/lapack
+rm -rf /usr/lib/gcc
+rm -rf /usr/lib/git-core
+rm -rf /usr/share
+rm -rf /tmp
+
 rm -rf node_modules/.cache
 
 cd /mastodon
@@ -68,3 +70,5 @@ sed -i '1s@^@#!/snap/mastodon/current/ruby/bin/ruby.sh\n@' /current/bin/bundle
 sed -i '1s@^@#!/snap/mastodon/current/ruby/bin/ruby.sh\n@' vendor/bundle/ruby/*/bin/*
 sed -i '1s@^@#!/snap/mastodon/current/ruby/bin/ruby.sh\n@' bin/rails
 sed -i '1s@^@#!/snap/mastodon/current/ruby/bin/ruby.sh\n@' bin/tootctl
+
+cp /usr/lib/*-linux-gnu*/blas/* /usr/lib/*-linux-gnu*/
