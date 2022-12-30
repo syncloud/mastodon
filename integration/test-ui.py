@@ -44,18 +44,19 @@ def test_publish_text(selenium):
     selenium.screenshot('publish-text')
 
 def test_publish_image(selenium):
-    done = "//span[text()='Done']"
+    
     selenium.find_by_xpath("//span[text()='Publish']").click()
     selenium.find_by_xpath("//label/textarea").send_keys("test image")
     file = selenium.driver.find_element(By.XPATH, '//input[@type="file"]')
     selenium.driver.execute_script("arguments[0].removeAttribute('style')", file)
     file.send_keys(join(DIR, 'images', 'profile.jpeg'))
     selenium.find_by_xpath("//button[text()='Publish!']").click()
+    selenium.find_by_xpath("//span[text()='Publish']")
     selenium.find_by_xpath("//*[text()='test image']")
     selenium.screenshot('publish-image')
 
 def test_publish_video(selenium):
-    done = "//span[text()='Done']"
+    
     selenium.find_by_xpath("//span[text()='Publish']").click()
     selenium.find_by_xpath("//label/textarea").send_keys("test video")
     file = selenium.driver.find_element(By.XPATH, '//input[@type="file"]')
@@ -63,6 +64,7 @@ def test_publish_video(selenium):
     file.send_keys(join(DIR, 'videos', 'test.mp4'))
     selenium.find_by_xpath("//button[text()='Publish!']").click()
     selenium.find_by_xpath("//*[text()='test video']")
+    selenium.find_by_xpath("//span[text()='Publish']")
     selenium.screenshot('publish-video')
 
 
