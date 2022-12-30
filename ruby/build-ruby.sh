@@ -71,4 +71,4 @@ sed -i '1s@^@#!/snap/mastodon/current/ruby/bin/ruby.sh\n@' vendor/bundle/ruby/*/
 sed -i '1s@^@#!/snap/mastodon/current/ruby/bin/ruby.sh\n@' bin/rails
 sed -i '1s@^@#!/snap/mastodon/current/ruby/bin/ruby.sh\n@' bin/tootctl
 
-cp /usr/lib/*-linux-gnu*/blas/* /usr/lib/*-linux-gnu*/
+cp --remove-destination /usr/lib/*-linux-gnu*/blas/* /usr/lib/*-linux-gnu*/
