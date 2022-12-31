@@ -7,6 +7,8 @@ from syncloudlib.integration.hosts import add_host_alias
 from subprocess import check_output, CalledProcessError, STDOUT
 from integration import lib
 import time
+from selenium.webdriver.support import expected_conditions as EC
+
 DIR = dirname(__file__)
 
 
@@ -32,24 +34,56 @@ def test_start(module_setup, app, domain, device_host, device):
 def test_login(selenium, device_user, device_password):
     lib.login(selenium, device_user, device_password)
 
-def test_publish(selenium):
+def test_publish_text(selenium):
     done = "//span[text()='Done']"
     if selenium.exists_by(By.XPATH, done):
         selenium.find_by_xpath(done).click()
+    time.sleep(2)
     selenium.find_by_xpath("//span[text()='Publish']").click()
     selenium.find_by_xpath("//label/textarea").send_keys("test post")
-    selenium.find_by_xpath("//button[text()='Publish!']").click()
+    publish = "//button[text()='Publish!']"
+    selenium.wait_driver.until(EC.element_to_be_clickable((By.XPATH, publish)))
+    selenium.find_by_xpath(publish).click()
     selenium.find_by_xpath("//*[text()='test post']")
-    selenium.screenshot('publish')
+    selenium.screenshot('publish-text')
+
+def test_publish_image(selenium):
+    
+    selenium.find_by_xpath("//span[text()='Publish']").click()
+    selenium.find_by_xpath("//label/textarea").send_keys("test image")
+    file = selenium.driver.find_element(By.XPATH, '//input[@type="file"]')
+    selenium.driver.execute_script("arguments[0].removeAttribute('style')", file)
+    file.send_keys(join(DIR, 'images', 'profile.jpeg'))
+    publish = "//button[text()='Publish!']"
+    selenium.wait_driver.until(EC.element_to_be_clickable((By.XPATH, publish)))
+    selenium.find_by_xpath(publish).click()
+    selenium.find_by_xpath("//span[text()='Publish']")
+    assert not selenium.exists_by(By.XPATH, "//span[contains(.,'Error processing')]")
+    selenium.find_by_xpath("//*[text()='test image']")
+    selenium.screenshot('publish-image')
+
+def test_publish_video(selenium):
+    
+    selenium.find_by_xpath("//span[text()='Publish']").click()
+    selenium.find_by_xpath("//label/textarea").send_keys("test video")
+    file = selenium.driver.find_element(By.XPATH, '//input[@type="file"]')
+    selenium.driver.execute_script("arguments[0].removeAttribute('style')", file)
+    file.send_keys(join(DIR, 'videos', 'test.mp4'))
+    publish = "//button[text()='Publish!']"
+    selenium.wait_driver.until(EC.element_to_be_clickable((By.XPATH, publish)))
+    selenium.find_by_xpath(publish).click()
+    selenium.find_by_xpath("//*[text()='test video']")
+    selenium.find_by_xpath("//span[text()='Publish']")
+    assert not selenium.exists_by(By.XPATH, "//span[contains(.,'Error processing')]")
+    selenium.screenshot('publish-video')
+
 
 def test_profile(selenium, ui_mode):
     selenium.find_by_xpath("//a[@title='user']").click()
     #selenium.find_by_xpath("//button[text()='Edit profile']").click()
     selenium.open_app("/settings/profile")
     #time.sleep(5)
-    file = selenium.find_by_xpath('//input[@type="file"]')
-    #driver.execute_script("arguments[0].removeAttribute('style')", file)
-    file.send_keys(join(DIR, 'images', 'profile.jpeg'))
+    selenium.find_by_id('account_avatar').send_keys(join(DIR, 'images', 'profile.jpeg'))
     selenium.screenshot('profile-file')
     selenium.find_by_xpath("//button[text()='Save changes']").click()   
     selenium.screenshot('profile-saved')

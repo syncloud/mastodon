@@ -18,5 +18,16 @@ rm -rf postgres.tar
 PGBIN=$(echo usr/lib/postgresql/*/bin)
 mv $PGBIN/postgres $PGBIN/postgres.bin
 mv $PGBIN/pg_dump $PGBIN/pg_dump.bin
+rm -rf var
+rm -rf usr/lib/*/perl
+rm -rf usr/lib/*/perl-base
+rm -rf usr/lib/*/dri
+rm -rf usr/lib/*/mfx
+rm -rf usr/lib/*/vdpau
+rm -rf usr/lib/*/gconv
+rm -rf usr/lib/*/lapack
+rm -rf usr/lib/gcc
+rm -rf usr/lib/git-core
+
 cp $DIR/bin/* bin
 cp $DIR/pgbin/* $PGBIN
