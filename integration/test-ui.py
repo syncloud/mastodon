@@ -58,6 +58,7 @@ def test_publish_image(selenium):
     selenium.wait_driver.until(EC.element_to_be_clickable((By.XPATH, publish)))
     selenium.find_by_xpath(publish).click()
     selenium.find_by_xpath("//span[text()='Publish']")
+    assert not selenium.exists_by(By.XPATH, "//span[contains(.,'Error processing')]")
     selenium.find_by_xpath("//*[text()='test image']")
     selenium.screenshot('publish-image')
 
@@ -73,6 +74,7 @@ def test_publish_video(selenium):
     selenium.find_by_xpath(publish).click()
     selenium.find_by_xpath("//*[text()='test video']")
     selenium.find_by_xpath("//span[text()='Publish']")
+    assert not selenium.exists_by(By.XPATH, "//span[contains(.,'Error processing')]")
     selenium.screenshot('publish-video')
 
 
