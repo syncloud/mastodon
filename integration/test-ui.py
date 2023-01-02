@@ -108,5 +108,16 @@ def test_import(selenium, ui_mode):
     selenium.find_by_xpath("//span[text()='Publish']")
 
 
+def test_export(selenium, ui_mode):
+    selenium.find_by_xpath("//a[@title='Preferences']").click()
+    selenium.find_by_xpath("//a[contains(.,'Import and export')]").click()
+    selenium.find_by_xpath("//a[contains(.,'Data export']").click() 
+    selenium.screenshot('export')
+    if ui_mode == "mobile":
+        selenium.find_by_xpath("//a[@aria-label='Toggle menu']").click()
+    selenium.find_by_xpath("//a[text()='Back to Mastodon']").click()
+    selenium.find_by_xpath("//span[text()='Publish']")
+
+
 def test_teardown(driver):
     driver.quit()
