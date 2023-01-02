@@ -94,6 +94,10 @@ def test_ffprobe(device):
     device.run_ssh('/snap/mastodon/current/ruby/bin/ffprobe --help > {0}/ffprobe.log 2>&1'.format(TMP_DIR))
 
 
+def test_file(device):
+    device.run_ssh('/snap/mastodon/current/ruby/bin/file --help > {0}/file.log 2>&1'.format(TMP_DIR))
+
+
 def test_backup_restore(device, artifact_dir):
     app_log_dir = join(artifact_dir, 'app')
     device.run_ssh("snap run platform.cli backup create mastodon")

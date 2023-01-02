@@ -8,7 +8,7 @@ VERSION=$1
 PREFIX=/build
 
 apt update
-apt install -y gnupg2 curl procps
+apt install -y gnupg2 curl procps file
 
 command curl -sSL https://rvm.io/mpapis.asc | gpg2 --import -
 command curl -sSL https://rvm.io/pkuczynski.asc | gpg2 --import -
