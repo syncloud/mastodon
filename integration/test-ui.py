@@ -82,7 +82,6 @@ def test_profile(selenium, ui_mode):
     selenium.find_by_xpath("//a[@title='user']").click()
     #selenium.find_by_xpath("//button[text()='Edit profile']").click()
     selenium.open_app("/settings/profile")
-    #time.sleep(5)
     selenium.find_by_id('account_avatar').send_keys(join(DIR, 'images', 'profile.jpeg'))
     selenium.screenshot('profile-file')
     selenium.find_by_xpath("//button[text()='Save changes']").click()   
@@ -92,6 +91,21 @@ def test_profile(selenium, ui_mode):
     selenium.find_by_xpath("//a[text()='Back to Mastodon']").click()
     selenium.find_by_xpath("//span[text()='Publish']")
     selenium.screenshot('posts')
+
+
+def test_import(selenium, ui_mode):
+    selenium.find_by_xpath("//a[@title='Preferences']").click()
+    selenium.find_by_xpath("//a[contains(.,'Import and export')]").click()
+    
+    selenium.find_by_id('account_avatar').send_keys(join(DIR, 'csv', 'following.csv'))
+    selenium.screenshot('import')
+    selenium.find_by_xpath("//button[text()='Save changes']").click()   
+    selenium.screenshot('import-saved')
+    if ui_mode == "mobile":
+        selenium.find_by_xpath("//a[@aria-label='Toggle menu']").click()
+    selenium.find_by_xpath("//a[text()='Back to Mastodon']").click()
+    selenium.find_by_xpath("//span[text()='Publish']")
+
 
 def test_teardown(driver):
     driver.quit()
