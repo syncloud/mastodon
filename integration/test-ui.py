@@ -96,7 +96,7 @@ def test_profile(selenium, ui_mode):
 def test_import(selenium, ui_mode):
     selenium.find_by_xpath("//a[@title='Preferences']").click()
     selenium.find_by_xpath("//a[contains(.,'Import and export')]").click()
-    
+    selenium.find_by_xpath("//a[@href='/settings/import']").click() 
     selenium.find_by_id('account_avatar').send_keys(join(DIR, 'csv', 'following.csv'))
     selenium.screenshot('import')
     selenium.find_by_xpath("//button[text()='Save changes']").click()   
