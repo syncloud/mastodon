@@ -100,8 +100,9 @@ def test_import(selenium, ui_mode):
     selenium.find_by_id('import_data').send_keys(join(DIR, 'csv', 'following.csv'))
     selenium.screenshot('import')
     selenium.find_by_xpath("//button[text()='Upload']").click()   
-    assert not selenium.exists_by(By.XPATH, "//span[contains(.,'has contents that are not')]") 
+    error = selenium.exists_by(By.XPATH, "//span[contains(.,'has contents that are not')]") 
     selenium.screenshot('import-saved')
+    assert not error
     if ui_mode == "mobile":
         selenium.find_by_xpath("//a[@aria-label='Toggle menu']").click()
     selenium.find_by_xpath("//a[text()='Back to Mastodon']").click()
