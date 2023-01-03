@@ -8,7 +8,7 @@ VERSION=$1
 PREFIX=/build
 
 apt update
-apt install -y gnupg2 curl procps
+apt install -y gnupg2 curl procps file
 
 command curl -sSL https://rvm.io/mpapis.asc | gpg2 --import -
 command curl -sSL https://rvm.io/pkuczynski.asc | gpg2 --import -
@@ -53,7 +53,6 @@ rm -rf /usr/lib/*/vdpau
 rm -rf /usr/lib/*/gconv
 rm -rf /usr/lib/gcc
 rm -rf /usr/lib/git-core
-rm -rf /usr/share
 rm -rf /tmp
 
 rm -rf node_modules/.cache

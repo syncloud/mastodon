@@ -42,7 +42,9 @@ def test_publish_text(selenium):
     selenium.find_by_xpath("//span[text()='Publish']").click()
     selenium.find_by_xpath("//label/textarea").send_keys("test post")
     publish = "//button[text()='Publish!']"
-    selenium.wait_driver.until(EC.element_to_be_clickable((By.XPATH, publish)))
+    selenium.wait_driver.until(EC.element_to_be_clickable((By.XPATH, publish)))   
+    selenium.screenshot('publish-text-before')
+    selenium.wait_driver.until(EC.invisibility_of_element_located((By.XPATH, "//span[@text()='Your home feed is being prepared!']")))
     selenium.find_by_xpath(publish).click()
     selenium.find_by_xpath("//*[text()='test post']")
     selenium.screenshot('publish-text')
@@ -82,7 +84,6 @@ def test_profile(selenium, ui_mode):
     selenium.find_by_xpath("//a[@title='user']").click()
     #selenium.find_by_xpath("//button[text()='Edit profile']").click()
     selenium.open_app("/settings/profile")
-    #time.sleep(5)
     selenium.find_by_id('account_avatar').send_keys(join(DIR, 'images', 'profile.jpeg'))
     selenium.screenshot('profile-file')
     selenium.find_by_xpath("//button[text()='Save changes']").click()   
@@ -92,6 +93,34 @@ def test_profile(selenium, ui_mode):
     selenium.find_by_xpath("//a[text()='Back to Mastodon']").click()
     selenium.find_by_xpath("//span[text()='Publish']")
     selenium.screenshot('posts')
+
+
+def test_import(selenium, ui_mode):
+    selenium.find_by_xpath("//a[@title='Preferences']").click()
+    selenium.find_by_xpath("//a[contains(.,'Import and export')]").click()
+    selenium.find_by_xpath("//a[@href='/settings/import']").click() 
+    selenium.find_by_id('import_data').send_keys(join(DIR, 'csv', 'following.csv'))
+    selenium.screenshot('import')
+    selenium.find_by_xpath("//button[text()='Upload']").click()   
+    error = selenium.exists_by(By.XPATH, "//span[contains(.,'has contents that are not')]") 
+    selenium.screenshot('import-saved')
+    assert not error
+    if ui_mode == "mobile":
+        selenium.find_by_xpath("//a[@aria-label='Toggle menu']").click()
+    selenium.find_by_xpath("//a[text()='Back to Mastodon']").click()
+    selenium.find_by_xpath("//span[text()='Publish']")
+
+
+def test_export(selenium, ui_mode):
+    selenium.find_by_xpath("//a[@title='Preferences']").click()
+    selenium.find_by_xpath("//a[contains(.,'Import and export')]").click()
+    #selenium.find_by_xpath("//a[contains(.,'Data export']").click() 
+    selenium.screenshot('export')
+    if ui_mode == "mobile":
+        selenium.find_by_xpath("//a[@aria-label='Toggle menu']").click()
+    selenium.find_by_xpath("//a[text()='Back to Mastodon']").click()
+    selenium.find_by_xpath("//span[text()='Publish']")
+
 
 def test_teardown(driver):
     driver.quit()

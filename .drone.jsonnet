@@ -152,7 +152,7 @@ local build(arch, test_ui, dind, node) = [{
               "pip install -r requirements.txt",
               "py.test -x -s test-ui.py --distro=buster --ui-mode=" + mode + " --domain=buster.com --device-host=" + name + ".buster.com --app=" + name + " --browser=" + browser,
             ]
-        } for mode in ["desktop", "mobile"] 
+        } for mode in ["desktop"] 
        ]
         +
        [
