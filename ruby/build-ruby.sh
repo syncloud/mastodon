@@ -53,7 +53,6 @@ rm -rf /usr/lib/*/vdpau
 rm -rf /usr/lib/*/gconv
 rm -rf /usr/lib/gcc
 rm -rf /usr/lib/git-core
-rm -rf /usr/share
 rm -rf /tmp
 
 rm -rf node_modules/.cache
