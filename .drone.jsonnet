@@ -5,7 +5,7 @@ local postgresql = "15-bullseye";
 local ruby = "3.0.4";
 local python = "3.8-slim-buster";
 local redis = "7.0.7-bullseye";
-local mastodon = "4.0.2";
+local mastodon = "4.1.2";
 
 local build(arch, test_ui, dind, node) = [{
     kind: "pipeline",
