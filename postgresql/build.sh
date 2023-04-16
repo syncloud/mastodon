@@ -7,7 +7,10 @@ VERSION=$1
 
 BUILD_DIR=${DIR}/../build/snap/postgresql
 
-docker build --build-arg VERSION=$VERSION -t syncloud .
+while ! docker build --build-arg VERSION=$VERSION -t syncloud . ; do
+  echo "retry"
+  sleep 1
+done
 docker run syncloud postgres --help
 docker create --name=postgres syncloud
 mkdir -p ${BUILD_DIR}
