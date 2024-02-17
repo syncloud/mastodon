@@ -5,7 +5,6 @@ from subprocess import check_output
 
 import pytest
 import requests
-from bs4 import BeautifulSoup
 from syncloudlib.integration.hosts import add_host_alias
 from syncloudlib.integration.installer import local_install, wait_for_installer
 from requests.packages.urllib3.exceptions import InsecureRequestWarning

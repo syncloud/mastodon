@@ -2,10 +2,9 @@ from os.path import dirname, join
 
 import pytest
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
 from syncloudlib.integration.hosts import add_host_alias
 from subprocess import check_output, CalledProcessError, STDOUT
-from integration import lib
+from test import lib
 import time
 from selenium.webdriver.support import expected_conditions as EC
 
