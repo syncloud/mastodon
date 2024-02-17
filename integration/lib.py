@@ -8,7 +8,7 @@ def login(selenium, device_user, device_password):
 
     selenium.open_app()
     selenium.screenshot('index')
-    selenium.find_by_xpath("//span[text()='Sign in']").click()
+    selenium.find_by_xpath("//span[text()='Login']").click()
     selenium.find_by_id("user_email").send_keys(device_user)
     password = selenium.find_by_id("user_password")
     password.send_keys(device_password)
