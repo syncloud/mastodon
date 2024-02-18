@@ -98,14 +98,12 @@ def test_import(selenium, ui_mode):
     selenium.find_by_xpath("//a[@title='Preferences']").click()
     selenium.find_by_xpath("//a[contains(.,'Import and export')]").click()
     selenium.find_by_xpath("//a[@href='/settings/imports']").click()
-    selenium.find_by_id('import_data').send_keys(join(DIR, 'csv', 'following.csv'))
+    selenium.find_by_id('form_import_data').send_keys(join(DIR, 'csv', 'following.csv'))
     selenium.screenshot('import')
     selenium.find_by_xpath("//button[text()='Upload']").click()   
     error = selenium.exists_by(By.XPATH, "//span[contains(.,'has contents that are not')]") 
     selenium.screenshot('import-saved')
     assert not error
-    if ui_mode == "mobile":
-        selenium.find_by_xpath("//a[@aria-label='Toggle menu']").click()
     selenium.find_by_xpath("//a[text()='Back to Mastodon']").click()
     selenium.find_by_xpath("//span[text()='New post']")
 
