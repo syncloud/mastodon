@@ -1,7 +1,6 @@
 import pytest
 from subprocess import check_output, CalledProcessError, STDOUT
 from syncloudlib.integration.hosts import add_host_alias
-from integration import lib
 from syncloudlib.integration.installer import local_install, wait_for_installer
 from syncloudlib.http import wait_for_rest
 import requests
@@ -29,7 +28,7 @@ def test_start(module_setup, app, device_host, domain, device):
 
 def test_upgrade(device, device_user, device_password, device_host, app_archive_path, app_domain):
     device.run_ssh('snap remove mastodon')
-    #device.run_ssh('snap install mastodon', retries=10)
+    device.run_ssh('snap install mastodon', retries=10)
     local_install(device_host, device_password, app_archive_path)
     wait_for_rest(requests.session(), "https://{0}".format(app_domain), 200, 10)
 

@@ -2,10 +2,9 @@ from os.path import dirname, join
 
 import pytest
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
 from syncloudlib.integration.hosts import add_host_alias
 from subprocess import check_output, CalledProcessError, STDOUT
-from integration import lib
+from test import lib
 import time
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -39,7 +38,7 @@ def test_publish_text(selenium):
     if selenium.exists_by(By.XPATH, done):
         selenium.find_by_xpath(done).click()
     time.sleep(2)
-    selenium.find_by_xpath("//span[text()='Publish']").click()
+    selenium.find_by_xpath("//span[text()='New post']").click()
     selenium.find_by_xpath("//label/textarea").send_keys("test post")
     publish = "//button[text()='Publish!']"
     selenium.wait_driver.until(EC.element_to_be_clickable((By.XPATH, publish)))   
@@ -51,7 +50,7 @@ def test_publish_text(selenium):
 
 def test_publish_image(selenium):
     
-    selenium.find_by_xpath("//span[text()='Publish']").click()
+    selenium.find_by_xpath("//span[text()='New post']").click()
     selenium.find_by_xpath("//label/textarea").send_keys("test image")
     file = selenium.driver.find_element(By.XPATH, '//input[@type="file"]')
     selenium.driver.execute_script("arguments[0].removeAttribute('style')", file)
@@ -59,14 +58,14 @@ def test_publish_image(selenium):
     publish = "//button[text()='Publish!']"
     selenium.wait_driver.until(EC.element_to_be_clickable((By.XPATH, publish)))
     selenium.find_by_xpath(publish).click()
-    selenium.find_by_xpath("//span[text()='Publish']")
+    selenium.find_by_xpath("//span[text()='New post']")
     assert not selenium.exists_by(By.XPATH, "//span[contains(.,'Error processing')]")
     selenium.find_by_xpath("//*[text()='test image']")
     selenium.screenshot('publish-image')
 
 def test_publish_video(selenium):
     
-    selenium.find_by_xpath("//span[text()='Publish']").click()
+    selenium.find_by_xpath("//span[text()='New post']").click()
     selenium.find_by_xpath("//label/textarea").send_keys("test video")
     file = selenium.driver.find_element(By.XPATH, '//input[@type="file"]')
     selenium.driver.execute_script("arguments[0].removeAttribute('style')", file)
@@ -75,7 +74,7 @@ def test_publish_video(selenium):
     selenium.wait_driver.until(EC.element_to_be_clickable((By.XPATH, publish)))
     selenium.find_by_xpath(publish).click()
     selenium.find_by_xpath("//*[text()='test video']")
-    selenium.find_by_xpath("//span[text()='Publish']")
+    selenium.find_by_xpath("//span[text()='New post']")
     assert not selenium.exists_by(By.XPATH, "//span[contains(.,'Error processing')]")
     selenium.screenshot('publish-video')
 
@@ -91,24 +90,22 @@ def test_profile(selenium, ui_mode):
     if ui_mode == "mobile":
         selenium.find_by_xpath("//a[@aria-label='Toggle menu']").click()
     selenium.find_by_xpath("//a[text()='Back to Mastodon']").click()
-    selenium.find_by_xpath("//span[text()='Publish']")
+    selenium.find_by_xpath("//span[text()='New post']")
     selenium.screenshot('posts')
 
 
 def test_import(selenium, ui_mode):
     selenium.find_by_xpath("//a[@title='Preferences']").click()
     selenium.find_by_xpath("//a[contains(.,'Import and export')]").click()
-    selenium.find_by_xpath("//a[@href='/settings/import']").click() 
-    selenium.find_by_id('import_data').send_keys(join(DIR, 'csv', 'following.csv'))
+    selenium.find_by_xpath("//a[@href='/settings/imports']").click()
+    selenium.find_by_id('form_import_data').send_keys(join(DIR, 'csv', 'following.csv'))
     selenium.screenshot('import')
     selenium.find_by_xpath("//button[text()='Upload']").click()   
     error = selenium.exists_by(By.XPATH, "//span[contains(.,'has contents that are not')]") 
     selenium.screenshot('import-saved')
     assert not error
-    if ui_mode == "mobile":
-        selenium.find_by_xpath("//a[@aria-label='Toggle menu']").click()
     selenium.find_by_xpath("//a[text()='Back to Mastodon']").click()
-    selenium.find_by_xpath("//span[text()='Publish']")
+    selenium.find_by_xpath("//span[text()='New post']")
 
 
 def test_export(selenium, ui_mode):
@@ -119,7 +116,7 @@ def test_export(selenium, ui_mode):
     if ui_mode == "mobile":
         selenium.find_by_xpath("//a[@aria-label='Toggle menu']").click()
     selenium.find_by_xpath("//a[text()='Back to Mastodon']").click()
-    selenium.find_by_xpath("//span[text()='Publish']")
+    selenium.find_by_xpath("//span[text()='New post']")
 
 
 def test_teardown(driver):
