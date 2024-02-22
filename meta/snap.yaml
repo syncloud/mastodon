@@ -46,6 +46,15 @@ apps:
     - network-bind
     restart-condition: always
 
+  cleaner:
+    command: bin/service.cleaner.sh
+    user: mastodon
+    daemon: forking
+    plugs:
+    - network
+    - network-bind
+    restart-condition: always
+
   storage-change:
     command: hooks/storage-change
 
