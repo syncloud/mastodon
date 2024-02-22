@@ -1,5 +1,6 @@
 #!/bin/bash -e
-
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )
+$DIR/bin/wait-for-db.sh
 while true; do
   echo "cleaning"
   snap run mastodon.tootctl media remove --prune-profiles --include-follows --days 1
