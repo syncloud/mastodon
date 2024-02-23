@@ -49,7 +49,7 @@ apps:
   cleaner:
     command: bin/service.cleaner.sh
     user: mastodon
-    daemon: forking
+    daemon: simple
     plugs:
     - network
     - network-bind
