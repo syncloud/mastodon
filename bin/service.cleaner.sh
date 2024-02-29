@@ -1,6 +1,6 @@
 #!/bin/bash -e
-DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )
-$DIR/bin/wait-for-db.sh
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+$DIR/wait-for-db.sh
 while true; do
   echo "cleaning"
   $DIR/tootctl.sh media remove --prune-profiles --include-follows --days 1
