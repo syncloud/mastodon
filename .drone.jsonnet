@@ -5,7 +5,7 @@ local postgresql = "15-bullseye";
 local ruby = "3.0.4";
 local python = "3.8-slim-buster";
 local redis = "7.0.7-bullseye";
-local mastodon = "4.2.7";
+local mastodon = "4.3.8";
 local deployer = "https://github.com/syncloud/store/releases/download/4/syncloud-release";
 
 local build(arch, test_ui, dind, node) = [{
