@@ -327,6 +327,6 @@ local build(arch, test_ui, dind, node) = [{
     }
 ];
 
-build("amd64", true, "20.10.21-dind", "16.19.0-bullseye-slim") +
-build("arm64", false, "19.03.8-dind", "16.19.0-bullseye-slim") +
-build("arm", false, "19.03.8-dind", "16.19.0-buster-slim")
+build("amd64", true, "20.10.21-dind", "20.15.1-bullseye-slim") +
+build("arm64", false, "19.03.8-dind", "20.15.1-bullseye-slim") +
+build("arm", false, "19.03.8-dind", "20.15.1-buster-slim")
