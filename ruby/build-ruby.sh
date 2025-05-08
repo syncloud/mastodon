@@ -40,7 +40,7 @@ bundle install -j$(getconf _NPROCESSORS_ONLN)
 npm install -g corepack
 corepack enable
 
-yarn install --pure-lockfile
+yarn install
 RAILS_ENV=production OTP_SECRET=1 SECRET_KEY_BASE=2 bundle exec rake assets:precompile
 yarn cache clean
 npm cache clean --force
