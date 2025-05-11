@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -ex
 
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
@@ -41,7 +41,15 @@ npm install -g corepack
 corepack enable
 
 yarn install
-RAILS_ENV=production OTP_SECRET=1 SECRET_KEY_BASE=2 bundle exec rake assets:precompile
+
+RAILS_ENV=production \
+  OTP_SECRET=1 \
+  SECRET_KEY_BASE=2 \
+  ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY=3 \
+  ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT=4 \
+  ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY=5 \
+  bundle exec rake assets:precompile
+
 yarn cache clean
 npm cache clean --force
 apt remove -y git-core g++ gcc autoconf build-essential
