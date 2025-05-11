@@ -7,8 +7,9 @@ local python = "3.8-slim-buster";
 local redis = "7.0.7-bullseye";
 local mastodon = "4.3.8";
 local deployer = "https://github.com/syncloud/store/releases/download/4/syncloud-release";
+local node = "20.15.1-bullseye-slim";
 
-local build(arch, test_ui, dind, node) = [{
+local build(arch, test_ui, dind) = [{
     kind: "pipeline",
     type: "docker",
     name: arch,
@@ -327,6 +328,6 @@ local build(arch, test_ui, dind, node) = [{
     }
 ];
 
-build("amd64", true, "20.10.21-dind", "20.15.1-bullseye-slim") +
-build("arm64", false, "19.03.8-dind", "20.15.1-bullseye-slim") +
-build("arm", false, "19.03.8-dind", "20.15.1-buster-slim")
+build("amd64", true, "20.10.21-dind") +
+build("arm64", false, "19.03.8-dind") +
+build("arm", false, "19.03.8-dind")
