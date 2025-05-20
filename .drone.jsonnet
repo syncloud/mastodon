@@ -95,17 +95,16 @@ local build(arch, test_ui, dind) = [{
             ]
         },
         {
-            name: "python",
-            image: "docker:" + dind,
-            commands: [
-                "./python/build.sh " + python
-            ],
-            volumes: [
-                {
-                    name: "dockersock",
-                    path: "/var/run"
-                }
-            ]
+          name: 'cli',
+          image: 'golang:1.20',
+          commands: [
+            'cd cli',
+            "go build -ldflags '-linkmode external -extldflags -static' -o ../build/snap/meta/hooks/install ./cmd/install",
+            "go build -ldflags '-linkmode external -extldflags -static' -o ../build/snap/meta/hooks/configure ./cmd/configure",
+            "go build -ldflags '-linkmode external -extldflags -static' -o ../build/snap/meta/hooks/pre-refresh ./cmd/pre-refresh",
+            "go build -ldflags '-linkmode external -extldflags -static' -o ../build/snap/meta/hooks/post-refresh ./cmd/post-refresh",
+            "go build -ldflags '-linkmode external -extldflags -static' -o ../build/snap/bin/cli ./cmd/cli",
+          ],
         },
         {
             name: "package",
