@@ -138,7 +138,7 @@ func (i *Installer) Initialize() error {
 	if err != nil {
 		return err
 	}
-	err = i.executor.Run("db:migrate")
+	err = i.rails.Run("db:migrate")
 	if err != nil {
 		return err
 	}
@@ -357,3 +357,4 @@ func getOrCreateUuid(file string) (string, error) {
 	}
 	return string(content), nil
 }
+
