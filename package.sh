@@ -18,12 +18,13 @@ apt -y install squashfs-tools
 
 cp -r ${DIR}/bin ${SNAP_DIR}
 cp -r ${DIR}/config ${SNAP_DIR}
-cp ${DIR}/snap.yaml ${SNAP_DIR}/meta
+cp ${DIR}/snap.yaml ${SNAP_DIR}/meta/
 
 echo "version: $VERSION" >> ${SNAP_DIR}/meta/snap.yaml
 echo "architectures:" >> ${SNAP_DIR}/meta/snap.yaml
 echo "- ${ARCH}" >> ${SNAP_DIR}/meta/snap.yaml
 echo $VERSION > ${SNAP_DIR}/version
+cat ${SNAP_DIR}/meta/snap.yaml
 
 du -d10 -h $SNAP_DIR | sort -h | tail -100
 
