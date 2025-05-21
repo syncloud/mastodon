@@ -43,12 +43,11 @@ type Installer struct {
 	appDir             string
 	dataDir            string
 	commonDir          string
-	mastodonDir        string
-	railsBin           string
 	platformClient     *platform.Client
 	database           *Database
 	installFile        string
 	executor           *Executor
+	rails              *Rails
 	logger             *zap.Logger
 }
 
@@ -56,8 +55,6 @@ func New(logger *zap.Logger) *Installer {
 	appDir := fmt.Sprintf("/snap/%s/current", App)
 	dataDir := fmt.Sprintf("/var/snap/%s/current", App)
 	commonDir := fmt.Sprintf("/var/snap/%s/common", App)
-	mastodonDir := path.Join(appDir, "ruby", "mastodon")
-	railsBin := path.Join(mastodonDir, "bin", "rails")
 
 	configDir := path.Join(dataDir, "config")
 
@@ -69,12 +66,11 @@ func New(logger *zap.Logger) *Installer {
 		appDir:             appDir,
 		dataDir:            dataDir,
 		commonDir:          commonDir,
-		mastodonDir:        mastodonDir,
-		railsBin:           railsBin,
 		platformClient:     platform.New(),
 		database:           NewDatabase(appDir, dataDir, configDir, App, executor, logger),
 		installFile:        path.Join(commonDir, "installed"),
 		executor:           executor,
+		rails:              NewRails(appDir, logger),
 		logger:             logger,
 	}
 }
@@ -138,11 +134,11 @@ func (i *Installer) Initialize() error {
 	//	return err
 	//}
 
-	err = i.executor.Run(i.railsBin, i.mastodonDir, "db:setup")
+	err = i.rails.Run("db:setup")
 	if err != nil {
 		return err
 	}
-	err = i.executor.Run(i.railsBin, i.mastodonDir, "db:migrate")
+	err = i.executor.Run("db:migrate")
 	if err != nil {
 		return err
 	}
@@ -173,7 +169,7 @@ func (i *Installer) Upgrade() error {
 	//if err != nil {
 	//	return err
 	//}
-	err = i.executor.Run(i.railsBin, i.mastodonDir, "db:migrate")
+	err = i.rails.Run("db:migrate")
 	if err != nil {
 		return err
 	}

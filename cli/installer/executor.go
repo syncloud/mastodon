@@ -16,10 +16,9 @@ func NewExecutor(logger *zap.Logger) *Executor {
 	}
 }
 
-func (e *Executor) RunWithCwd(app string, cwd string, args ...string) error {
+func (e *Executor) Run(app string, args ...string) error {
 	cmd := exec.Command(app, args...)
 	e.logger.Info("executing", zap.String("cmd", cmd.String()))
-	cmd.Dir = cwd
 	out, err := cmd.CombinedOutput()
 	e.logger.Info("command output")
 	for _, line := range strings.Split(string(out), "\n") {
@@ -27,8 +26,4 @@ func (e *Executor) RunWithCwd(app string, cwd string, args ...string) error {
 	}
 	return err
 
-}
-
-func (e *Executor) Run(app string, args ...string) error {
-	return e.RunWithCwd(app, "", args...)
 }
