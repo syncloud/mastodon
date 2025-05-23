@@ -25,61 +25,6 @@ local build(arch, test_ui) = [
       arch: arch,
     },
     steps: [
-        {
-            name: "version",
-            image: "debian:buster-slim",
-            commands: [
-                "echo $DRONE_BUILD_NUMBER > version"
-            ]
-        },
-	{
-	    name: "download",
-	    image: "alpine:3.17.0",
-            commands: [
-	        "./download.sh " + mastodon
-            ]
-	}, 
-        {
-            name: "redis",
-            image: "docker:" + dind,
-            commands: [
-                "./redis/build.sh " + redis
-            ],
-            volumes: [
-                {
-                    name: "dockersock",
-                    path: "/var/run"
-                }
-            ]
-        },
-        {
-            name: "redis test",
-            image: "debian:buster-slim",
-            commands: [
-                "./redis/test.sh"
-            ]
-        },
-  
-        {
-            name: "ruby",
-            image: "docker:" + dind,
-            commands: [
-                "./ruby/build.sh " + ruby + " " + node
-            ],
-            volumes: [
-                {
-                    name: "dockersock",
-                    path: "/var/run"
-                }
-            ]
-        },
-        {
-            name: "ruby test",
-            image: "debian:buster-slim",
-            commands: [
-                "ruby/test.sh"
-            ]
-        },
              {
                name: 'version',
                image: 'debian:buster-slim',
