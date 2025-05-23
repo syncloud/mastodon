@@ -4,7 +4,7 @@ local go = '1.20';
 local postgresql = '15-bullseye';
 local ruby = '3.4.3';
 local nginx = '1.24.0';
-local python = '3.8-slim-buster';
+local python = '3.9-slim-buster';
 local redis = '7.0.7-bullseye';
 local mastodon = '4.3.8';
 local deployer = 'https://github.com/syncloud/store/releases/download/4/syncloud-release';
@@ -135,16 +135,18 @@ local build(arch, test_ui) = [
                  './package.sh ' + name + ' $VERSION ',
                ],
              },
-             {
-               name: 'test',
-               image: 'python:3.8-slim-buster',
-               commands: [
-                 'APP_ARCHIVE_PATH=$(realpath $(cat package.name))',
-                 'cd test',
-                 './deps.sh',
-                 'py.test -x -s test.py --distro=buster --domain=buster.com --app-archive-path=$APP_ARCHIVE_PATH --device-host=' + name + '.buster.com --app=' + name + ' --arch=' + arch,
-               ],
-             },
+             ] + [
+               {
+                 name: 'test ' + distro,
+                 image: 'python:' + python,
+                 commands: [
+                   'APP_ARCHIVE_PATH=$(realpath $(cat package.name))',
+                   'cd test',
+                   './deps.sh',
+                   'py.test -x -s test.py --distro=' + distro + ' --domain=' + distro + '.com --app-archive-path=$APP_ARCHIVE_PATH --device-host=' + name + '.' + distro + '.com --app=' + name + ' --arch=' + arch,
+                 ],
+               }
+               for distro in distros
            ] +
            (if test_ui then (
               [
