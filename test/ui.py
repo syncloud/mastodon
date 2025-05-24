@@ -40,7 +40,7 @@ def test_publish_text(selenium):
         selenium.find_by_xpath(done).click()
     time.sleep(2)
     selenium.find_by_xpath("//span[text()='New post']").click()
-    selenium.find_by_xpath("//textareaI[contains(@placeholder, 'on your mind')]").send_keys("test post")
+    selenium.find_by_xpath("//textarea[contains(@placeholder, 'on your mind')]").send_keys("test post")
     publish = "//button[text()='Publish!']"
     selenium.wait_driver.until(EC.element_to_be_clickable((By.XPATH, publish)))   
     selenium.screenshot('publish-text-before')
