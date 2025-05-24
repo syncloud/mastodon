@@ -55,11 +55,11 @@ def test_publish_text(selenium):
 def test_publish_image(selenium):
     
     selenium.find_by_xpath("//span[text()='New post']").click()
-    selenium.find_by_xpath("//label/textarea").send_keys("test image")
+    selenium.find_by_xpath("//textarea[contains(@placeholder, 'on your mind')]").send_keys("test image")
     file = selenium.driver.find_element(By.XPATH, '//input[@type="file"]')
     selenium.driver.execute_script("arguments[0].removeAttribute('style')", file)
     file.send_keys(join(DIR, 'images', 'profile.jpeg'))
-    publish = "//button[text()='Publish!']"
+    publish = "//button[text()='Post']"
     selenium.wait_driver.until(EC.element_to_be_clickable((By.XPATH, publish)))
     selenium.find_by_xpath(publish).click()
     selenium.find_by_xpath("//span[text()='New post']")
@@ -70,11 +70,11 @@ def test_publish_image(selenium):
 def test_publish_video(selenium):
     
     selenium.find_by_xpath("//span[text()='New post']").click()
-    selenium.find_by_xpath("//label/textarea").send_keys("test video")
+    selenium.find_by_xpath("//textarea[contains(@placeholder, 'on your mind')]").send_keys("test video")
     file = selenium.driver.find_element(By.XPATH, '//input[@type="file"]')
     selenium.driver.execute_script("arguments[0].removeAttribute('style')", file)
     file.send_keys(join(DIR, 'videos', 'test.mp4'))
-    publish = "//button[text()='Publish!']"
+    publish = "//button[text()='Post']"
     selenium.wait_driver.until(EC.element_to_be_clickable((By.XPATH, publish)))
     selenium.find_by_xpath(publish).click()
     selenium.find_by_xpath("//*[text()='test video']")
