@@ -13,18 +13,21 @@ DIR = dirname(__file__)
 
 
 @pytest.fixture(scope="session")
-def module_setup(request, device, log_dir, ui_mode, artifact_dir):
-    def module_teardown():
-        tmp_dir = '/tmp/syncloud/ui'
-        
-        device.run_ssh('mkdir -p {0}/{1}'.format(tmp_dir, ui_mode), throw=False)
-        device.run_ssh('journalctl > {0}/{1}/journalctl.log'.format(tmp_dir, ui_mode), throw=False)
-        device.run_ssh('cp -r /var/snap/mastodon/common/log {0}/{1}'.format(tmp_dir, ui_mode), throw=False)
-        device.scp_from_device('{0}/*'.format(tmp_dir), artifact_dir)
-        check_output('chmod -R a+r {0}'.format(artifact_dir), shell=True)
+def module_setup(request, device, artifact_dir, ui_mode, data_dir, app, domain, device_host, local, selenium):
+    if not local:
+        add_host_alias(app, device_host, domain)
+        device.activated()
+        device.run_ssh('mkdir -p {0}'.format(TMP_DIR), throw=False)     
 
-    request.addfinalizer(module_teardown)
-
+        def module_teardown():
+            device.run_ssh('journalctl > {0}/journalctl.log'.format(TMP_DIR), throw=False)
+            device.run_ssh("snap run invoiceninja.sql invoiceninja -e 'select * from users;' > {0}/users.log".format(TMP_DIR), throw=False)
+            device.run_ssh('cp -r {0}/log/*.log {1}'.format(data_dir, TMP_DIR), throw=False)
+            device.scp_from_device('{0}/*'.format(TMP_DIR), join(artifact_dir, ui_mode))
+            check_output('cp /videos/* {0}'.format(artifact_dir), shell=True)
+            check_output('chmod -R a+r {0}'.format(artifact_dir), shell=True)
+            selenium.log()
+        request.addfinalizer(module_teardown)
 
 def test_start(module_setup, app, domain, device_host, device):
     device.activated()
@@ -118,7 +121,3 @@ def test_export(selenium, ui_mode):
         selenium.find_by_xpath("//a[@aria-label='Toggle menu']").click()
     selenium.find_by_xpath("//a[text()='Back to Mastodon']").click()
     selenium.find_by_xpath("//span[text()='New post']")
-
-
-def test_teardown(driver):
-    driver.quit()
