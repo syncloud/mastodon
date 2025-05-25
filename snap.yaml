@@ -56,19 +56,19 @@ apps:
     restart-condition: always
 
   storage-change:
-    command: hooks/storage-change
+    command: bin/cli storage-change
 
   access-change:
-    command: hooks/access-change
+    command: bin/cli access-change
 
   backup-pre-stop:
-    command: hooks/backup-pre-stop
+    command: bin/cli backup-pre-stop
 
   restore-pre-start:
-    command: hooks/restore-pre-start
+    command: bin/cli restore-pre-start
 
   restore-post-start:
-    command: hooks/restore-post-start
+    command: bin/cli restore-post-start
 
   psql:
     command: bin/psql.sh
@@ -84,3 +84,4 @@ description: Mastodon
 grade: stable
 name: mastodon
 summary: Mastodon
+

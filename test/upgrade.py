@@ -1,9 +1,11 @@
+from subprocess import check_output
+
 import pytest
-from subprocess import check_output, CalledProcessError, STDOUT
-from syncloudlib.integration.hosts import add_host_alias
-from syncloudlib.integration.installer import local_install, wait_for_installer
-from syncloudlib.http import wait_for_rest
 import requests
+from syncloudlib.http import wait_for_rest
+from syncloudlib.integration.hosts import add_host_alias
+from syncloudlib.integration.installer import local_install
+
 TMP_DIR = '/tmp/syncloud'
 
 

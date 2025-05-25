@@ -81,7 +81,7 @@ def test_access_change_event(device):
     device.run_ssh('snap run mastodon.access-change > {0}/access-change.log'.format(TMP_DIR))
 
 
-def test_access_change_event(device):
+def test_tootclt_change_event(device):
     device.run_ssh('snap run mastodon.tootctl > {0}/tootctl.log'.format(TMP_DIR))
 
 
