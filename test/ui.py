@@ -93,7 +93,7 @@ def test_profile(selenium, ui_mode):
     selenium.screenshot('profile-saved')
     if ui_mode == "mobile":
         selenium.find_by_xpath("//a[@aria-label='Toggle menu']").click()
-    selenium.find_by_xpath("//a[text()='Back to Mastodon']").click()
+    selenium.find_by_xpath("//a[contains(.,'Back to Mastodon')]").click()
     selenium.find_by_xpath("//span[text()='New post']")
     selenium.screenshot('posts')
 
@@ -108,7 +108,7 @@ def test_import(selenium, ui_mode):
     error = selenium.exists_by(By.XPATH, "//span[contains(.,'has contents that are not')]") 
     selenium.screenshot('import-saved')
     assert not error
-    selenium.find_by_xpath("//a[text()='Back to Mastodon']").click()
+    selenium.find_by_xpath("//a[contains(.,'Back to Mastodon')]").click()
     selenium.find_by_xpath("//span[text()='New post']")
 
 
@@ -119,5 +119,5 @@ def test_export(selenium, ui_mode):
     selenium.screenshot('export')
     if ui_mode == "mobile":
         selenium.find_by_xpath("//a[@aria-label='Toggle menu']").click()
-    selenium.find_by_xpath("//a[text()='Back to Mastodon']").click()
+    selenium.find_by_xpath("//a[contains(.,'Back to Mastodon')]").click()
     selenium.find_by_xpath("//span[text()='New post']")
