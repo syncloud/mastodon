@@ -28,7 +28,7 @@ apt install -y git imagemagick ffmpeg libpq-dev libxml2-dev libxslt1-dev file gi
                      g++ libprotobuf-dev protobuf-compiler pkg-config gcc autoconf \
                      bison build-essential libssl-dev libyaml-dev libreadline6-dev \
                      zlib1g-dev libncurses5-dev libffi-dev libgdbm-dev \
-                     libidn11-dev libicu-dev libjemalloc-dev
+                     libidn11-dev libicu-dev libjemalloc-dev libvips-dev
 
 export PATH=$PATH:/current/bin
 cd /mastodon
