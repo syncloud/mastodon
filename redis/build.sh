@@ -5,6 +5,10 @@ cd ${DIR}
 BUILD_DIR=${DIR}/../build/snap/redis
 mkdir -p $BUILD_DIR
 cp -r /usr ${BUILD_DIR}
+
+ls -la /lib/*-linux*
+ls -la /usr/lib/*-linux*
+
 ls -la /usr/lib/*-linux*/ld-*.so.*
 ls -la /lib/*-linux*/ld-*.so.*
 
