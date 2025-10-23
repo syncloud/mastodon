@@ -7,5 +7,7 @@ mkdir -p $BUILD_DIR
 cp -r /usr ${BUILD_DIR}
 cd ${BUILD_DIR}
 ln -s usr/lib lib
+ls -la
+ls -la lib/
 cd $DIR
 cp -r ${DIR}/bin ${BUILD_DIR}/bin
