@@ -33,6 +33,9 @@ apt install -y git imagemagick ffmpeg libpq-dev libxml2-dev libxslt1-dev file gi
 export PATH=$PATH:/current/bin
 cd /mastodon
 
+export RAILS_ENV="production"
+export NODE_ENV="production"
+
 bundle config deployment 'true'
 bundle config without 'development test exclude'
 bundle config set silence_root_warning true
