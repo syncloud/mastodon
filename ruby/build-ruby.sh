@@ -34,23 +34,29 @@ export PATH=$PATH:/current/bin
 cd /mastodon
 
 bundle config deployment 'true'
-bundle config without 'development test'
+bundle config without 'development test exclude'
+bundle config set silence_root_warning true
 bundle install -j$(getconf _NPROCESSORS_ONLN)
 
 npm install -g corepack
 corepack enable
 
-yarn install
+yarn workspaces focus --production @mastodon/mastodon
 
-RAILS_ENV=production \
-  OTP_SECRET=1 \
-  SECRET_KEY_BASE=2 \
-  ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY=3 \
-  ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT=4 \
-  ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY=5 \
-  bundle exec rake assets:precompile
+ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY=precompile_placeholder \
+ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT=precompile_placeholder \
+ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY=precompile_placeholder \
+OTP_SECRET=precompile_placeholder \
+SECRET_KEY_BASE=precompile_placeholder \
+bundle exec rails assets:precompile
+
+bundle exec bootsnap precompile --gemfile app/ lib/
+cd streaming
+yarn workspaces focus --production @mastodon/streaming
 
 yarn cache clean
+apk del --purge build-dependencies
+
 npm cache clean --force
 apt remove -y git-core g++ gcc autoconf build-essential
 apt autoremove -y
