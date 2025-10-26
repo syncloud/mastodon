@@ -44,7 +44,7 @@ bundle install -j$(getconf _NPROCESSORS_ONLN)
 npm install -g corepack
 corepack enable
 
-yarn workspaces focus --production @mastodon/mastodon
+yarn install
 
 ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY=precompile_placeholder \
   ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT=precompile_placeholder \
@@ -53,9 +53,9 @@ ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY=precompile_placeholder \
   SECRET_KEY_BASE=precompile_placeholder \
   bundle exec rails assets:precompile
 
-bundle exec bootsnap precompile --gemfile app/ lib/
-cd streaming
-yarn workspaces focus --production @mastodon/streaming
+#bundle exec bootsnap precompile --gemfile app/ lib/
+#cd streaming
+#yarn workspaces focus --production @mastodon/streaming
 
 yarn cache clean
 apk del --purge build-dependencies
