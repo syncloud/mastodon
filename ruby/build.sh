@@ -23,7 +23,8 @@ icu-dev \
 yaml-dev \
 zlib-dev \
 npm \
-vips-dev
+vips-dev \
+git
 
 export RAILS_ENV=production
 export NODE_ENV=production
