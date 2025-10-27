@@ -48,7 +48,7 @@ ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY=precompile_placeholder \
   bundle exec rails assets:precompile
 
 ln -s /var/snap/mastodon/current/config/.env.production .env.production
-sed -i '1s@^@#!/snap/mastodon/current/ruby/bin/ruby.sh\n@' /current/bin/bundle
+#sed -i '1s@^@#!/snap/mastodon/current/ruby/bin/ruby.sh\n@' /current/bin/bundle
 sed -i '1s@^@#!/snap/mastodon/current/ruby/bin/ruby.sh\n@' vendor/bundle/ruby/*/bin/*
 sed -i '1s@^@#!/snap/mastodon/current/ruby/bin/ruby.sh\n@' bin/rails
 sed -i '1s@^@#!/snap/mastodon/current/ruby/bin/ruby.sh\n@' bin/tootctl
@@ -57,6 +57,7 @@ cd public
 ln -s /var/snap/mastodon/current/system system
 
 mv ${DIR}/../build/mastodon-${VERSION} ${BUILD_DIR}/mastodon
-cp -r /usr ${BUILD_DIR}/usr
+cp -r /usr ${BUILD_DIR}
+cp -r /lib ${BUILD_DIR}
 mkdir ${BUILD_DIR}/bin
 cp ${DIR}/bin/* ${BUILD_DIR}/bin
