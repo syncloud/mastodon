@@ -2,13 +2,11 @@ local name = 'mastodon';
 local browser = 'firefox';
 local go = '1.24.0';
 local postgresql = '15-bullseye';
-local ruby = '3.4.7';
 local nginx = '1.24.0';
 local python = '3.9-slim-buster';
 local redis = '7.0.7-bullseye';
 local mastodon = '4.4.8';
 local deployer = 'https://github.com/syncloud/store/releases/download/4/syncloud-release';
-local node = '20.19.5-bookworm-slim';
 local platform = '25.09';
 local selenium = '4.35.0-20250828';
 local debian = 'bookworm-slim';
@@ -34,10 +32,23 @@ local build(arch, test_ui) = [
                ],
              },
              {
-               name: 'download',
-               image: 'alpine:3.17.0',
+               name: 'ruby',
+               image: 'alpine:3.22.2',
                commands: [
-                 './download.sh ' + mastodon,
+                 './ruby/build.sh ' + mastoson,
+               ],
+               volumes: [
+                 {
+                   name: 'dockersock',
+                   path: '/var/run',
+                 },
+               ],
+             },
+             {
+               name: 'ruby test',
+               image: 'syncloud/platform-' + distro_default + '-' + arch + ':' + platform,
+               commands: [
+                 'ruby/test.sh',
                ],
              },
               {
@@ -69,26 +80,7 @@ local build(arch, test_ui) = [
                ],
              },
 
-             {
-               name: 'ruby',
-               image: 'docker:' + dind,
-               commands: [
-                 './ruby/build.sh ' + ruby + ' ' + node,
-               ],
-               volumes: [
-                 {
-                   name: 'dockersock',
-                   path: '/var/run',
-                 },
-               ],
-             },
-             {
-               name: 'ruby test',
-               image: 'syncloud/platform-' + distro_default + '-' + arch + ':' + platform,
-               commands: [
-                 'ruby/test.sh',
-               ],
-             },
+             
 
              {
             name: "postgresql",
