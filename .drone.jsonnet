@@ -35,7 +35,7 @@ local build(arch, test_ui) = [
                name: 'ruby',
                image: 'alpine:3.22.2',
                commands: [
-                 './ruby/build.sh ' + mastoson,
+                 './ruby/build.sh ' + mastodon,
                ],
                volumes: [
                  {
