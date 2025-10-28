@@ -27,7 +27,7 @@ npm \
 vips-dev \
 git
 
-apk remove \
+apk del \
 nodejs \
 build-base \
 npm \
