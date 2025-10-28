@@ -27,12 +27,6 @@ npm \
 vips-dev \
 git
 
-apk del \
-nodejs \
-build-base \
-npm \
-git
-
 export RAILS_ENV=production
 export NODE_ENV=production
 export COREPACK_ENABLE_DOWNLOAD_PROMPT=0
@@ -53,6 +47,12 @@ ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY=precompile_placeholder \
   OTP_SECRET=precompile_placeholder \
   SECRET_KEY_BASE=precompile_placeholder \
   bundle exec rails assets:precompile
+
+apk del \
+nodejs \
+build-base \
+npm \
+git
 
 ln -s /var/snap/mastodon/current/config/.env.production .env.production
 #sed -i '1s@^@#!/snap/mastodon/current/ruby/bin/ruby.sh\n@' /current/bin/bundle
