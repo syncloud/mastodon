@@ -12,7 +12,8 @@ wget https://github.com/mastodon/mastodon/archive/refs/tags/v${VERSION}.tar.gz
 tar xf v${VERSION}.tar.gz
 cd mastodon-${VERSION}
 
-apk add ruby \
+apk add \
+ruby \
 nodejs \
 ruby-bundler \
 ruby-dev \
@@ -24,6 +25,12 @@ yaml-dev \
 zlib-dev \
 npm \
 vips-dev \
+git
+
+apk remove \
+nodejs \
+build-base \
+npm \
 git
 
 export RAILS_ENV=production
