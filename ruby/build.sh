@@ -55,6 +55,7 @@ npm \
 git
 find / -name bundler
 ruby -e 'puts Gem.path'
+ruby -e "puts $:"
 
 ln -s /var/snap/mastodon/current/config/.env.production .env.production
 sed -i '1s@^@#!/snap/mastodon/current/ruby/bin/ruby.sh\n@' /usr/bin/bundle
