@@ -2,9 +2,9 @@
 DIR=$( cd "$( dirname "$0" )" && pwd )
 cd $DIR/../build/snap/ruby
 export RAILS_ENV=production
+find . -name bundler
 ./bin/ruby.sh -e 'puts "Hello"'
 ./bin/ruby.sh -e 'puts Gem.path'
-find . -name bundler
 ./bin/ruby.sh -e "require 'bundler/setup'"
 ./bin/ruby.sh mastodon/bin/rails
 ./bin/node.sh -e 'console.log("test")'

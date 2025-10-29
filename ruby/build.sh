@@ -53,7 +53,7 @@ nodejs \
 build-base \
 npm \
 git
-
+find / -name bundler
 ruby -e 'puts Gem.path'
 
 ln -s /var/snap/mastodon/current/config/.env.production .env.production
