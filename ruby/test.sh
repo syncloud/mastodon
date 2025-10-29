@@ -10,3 +10,4 @@ find . -name bundler
 #./bin/ruby.sh mastodon/bin/rails
 ./bin/node.sh -e 'console.log("test")'
 ./bin/file -b --mime $DIR/../test/csv/following.csv
+./bin/ffmpeg --help
