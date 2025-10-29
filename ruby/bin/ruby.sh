@@ -1,4 +1,4 @@
-#!/bin/bash -xe
+#!/bin/bash -e
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )
 LIBS=$(echo ${DIR}/lib)
 LIBS=$LIBS:$(echo ${DIR}/usr/lib)
@@ -11,3 +11,4 @@ export PATH="$GEM_HOME/bin:$PATH"
 RUBYLIB="$(echo $DIR/usr/lib/ruby/*.*.*)"
 export RUBYLIB="$RUBYLIB:$(echo $DIR/usr/lib/ruby/*.*.*/*-linux-*)"
 exec ${DIR}/lib*/ld-*.so* --library-path $LIBS ${DIR}/usr/bin/ruby "$@"
+
