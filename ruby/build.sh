@@ -49,7 +49,6 @@ ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY=precompile_placeholder \
   bundle exec rails assets:precompile
 
 apk del \
-nodejs \
 build-base \
 npm \
 git
