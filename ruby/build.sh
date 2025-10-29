@@ -25,7 +25,8 @@ yaml-dev \
 zlib-dev \
 npm \
 vips-dev \
-git
+git \
+file
 
 export RAILS_ENV=production
 export NODE_ENV=production
