@@ -4,7 +4,7 @@ LIBS=$(echo ${DIR}/lib)
 LIBS=$LIBS:$(echo ${DIR}/usr/lib)
 LIBS=$LIBS:$(echo ${DIR}/usr/local/lib)
 #export LD_PRELOAD=$(readlink -f ${DIR}/usr/lib/*-linux-gnu*/libjemalloc.so)
-export GEM_HOME="$(ls $DIR/usr/lib/ruby/gems/*/)"
-export GEM_PATH="$GEM_HOME"
-export PATH="$GEM_HOME/bin:$PATH"
+#export GEM_HOME="$(ls $DIR/usr/lib/ruby/gems/*/)"
+#export GEM_PATH="$GEM_HOME"
+#export PATH="$GEM_HOME/bin:$PATH"
 exec ${DIR}/lib*/ld-*.so* --library-path $LIBS ${DIR}/usr/bin/ruby "$@"
