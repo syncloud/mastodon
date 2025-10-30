@@ -14,4 +14,5 @@ find . -name bundler
 ./bin/convert --help
 ./bin/ffplay --help
 ./bin/ffprobe --help
-./bin/identify --help
+./bin/identify -help
+
