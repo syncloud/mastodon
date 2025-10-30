@@ -11,3 +11,7 @@ find . -name bundler
 ./bin/node.sh -e 'console.log("test")'
 ./bin/file -b --mime $DIR/../test/csv/following.csv
 ./bin/ffmpeg --help
+./bin/convert --help
+./bin/ffplay --help
+./bin/ffprobe --help
+./bin/identify --help
