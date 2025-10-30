@@ -28,7 +28,8 @@ vips-dev \
 git \
 file \
 imagemagick \
-ffmpeg
+ffmpeg \
+ffplay
 
 export RAILS_ENV=production
 export NODE_ENV=production
