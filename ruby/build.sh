@@ -27,7 +27,8 @@ npm \
 vips-dev \
 git \
 file \
-imagemagick
+imagemagick \
+ffmpeg
 
 export RAILS_ENV=production
 export NODE_ENV=production
