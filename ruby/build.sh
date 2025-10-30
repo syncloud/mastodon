@@ -26,7 +26,8 @@ zlib-dev \
 npm \
 vips-dev \
 git \
-file
+file \
+imagemagic
 
 export RAILS_ENV=production
 export NODE_ENV=production
