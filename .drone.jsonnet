@@ -26,7 +26,7 @@ local build(arch, test_ui) = [
     steps: [
              {
                name: 'version',
-               image: "debian:" + debian,
+               image: 'debian:' + debian,
                commands: [
                  'echo $DRONE_BUILD_NUMBER > version',
                ],
@@ -51,20 +51,20 @@ local build(arch, test_ui) = [
                  'ruby/test.sh',
                ],
              },
-              {
-             name: 'redis',
-             image: 'redis:' + redis,
-             commands: [
-               './redis/build.sh',
-             ],
-           },
-           {
-             name: 'redis test',
-             image: 'syncloud/platform-' + distro_default + '-' + arch + ':' + platform,
-             commands: [
-               './redis/test.sh',
-             ],
-           },
+             {
+               name: 'redis',
+               image: 'redis:' + redis,
+               commands: [
+                 './redis/build.sh',
+               ],
+             },
+             {
+               name: 'redis test',
+               image: 'syncloud/platform-' + distro_default + '-' + arch + ':' + platform,
+               commands: [
+                 './redis/test.sh',
+               ],
+             },
              {
                name: 'nginx',
                image: 'nginx:' + nginx,
@@ -80,23 +80,22 @@ local build(arch, test_ui) = [
                ],
              },
 
-             
 
              {
-            name: "postgresql",
-            image: "postgres:" + postgresql,
-            commands: [
-                "./postgresql/build.sh"
-            ]
-           
-        },
-        {
-            name: "postgresql test",
-            image: 'syncloud/platform-' + distro_default + '-' + arch + ':' + platform,
-            commands: [
-                "./postgresql/test.sh"
-            ]
-        },
+               name: 'postgresql',
+               image: 'postgres:' + postgresql,
+               commands: [
+                 './postgresql/build.sh',
+               ],
+
+             },
+             {
+               name: 'postgresql test',
+               image: 'syncloud/platform-' + distro_default + '-' + arch + ':' + platform,
+               commands: [
+                 './postgresql/test.sh',
+               ],
+             },
              {
                name: 'cli',
                image: 'golang:' + go,
@@ -111,23 +110,23 @@ local build(arch, test_ui) = [
              },
              {
                name: 'package',
-               image: "debian:" + debian,
+               image: 'debian:' + debian,
                commands: [
                  'VERSION=$(cat version)',
                  './package.sh ' + name + ' $VERSION ',
                ],
              },
-             ] + [
-               {
-                 name: 'test ' + distro,
-                 image: 'python:' + python,
-                 commands: [
-                   'cd test',
-                   './deps.sh',
-                   'py.test -x -s test.py --distro=' + distro + ' --ver=$DRONE_BUILD_NUMBER --app=' + name,
-                 ],
-               }
-               for distro in distros
+           ] + [
+             {
+               name: 'test ' + distro,
+               image: 'python:' + python,
+               commands: [
+                 'cd test',
+                 './deps.sh',
+                 'py.test -x -s test.py --distro=' + distro + ' --ver=$DRONE_BUILD_NUMBER --app=' + name,
+               ],
+             }
+             for distro in distros
            ] +
            (if test_ui then (
               [
@@ -177,8 +176,8 @@ local build(arch, test_ui) = [
                   commands: [
                     'cd test',
                     './deps.sh',
-                   'py.test -x -s ui.py --distro=' + distro_default + ' --ver=$DRONE_BUILD_NUMBER --app=' + name + ' --browser=' + browser,
-                      ],
+                    'py.test -x -s ui.py --distro=' + distro_default + ' --ver=$DRONE_BUILD_NUMBER --app=' + name + ' --browser=' + browser,
+                  ],
                   volumes: [{
                     name: 'videos',
                     path: '/videos',
@@ -191,8 +190,8 @@ local build(arch, test_ui) = [
                     'APP_ARCHIVE_PATH=$(realpath $(cat package.name))',
                     'cd test',
                     './deps.sh',
-                   'py.test -x -s upgrade.py --distro=' + distro_default + ' --ver=$DRONE_BUILD_NUMBER --app=' + name + ' --browser=' + browser,
-                       ],
+                    'py.test -x -s upgrade.py --distro=' + distro_default + ' --ver=$DRONE_BUILD_NUMBER --app=' + name + ' --browser=' + browser,
+                  ],
                   privileged: true,
                   volumes: [{
                     name: 'videos',
@@ -203,7 +202,7 @@ local build(arch, test_ui) = [
             ) else []) + [
       {
         name: 'upload',
-        image: "debian:" + debian,
+        image: 'debian:' + debian,
         environment: {
           AWS_ACCESS_KEY_ID: {
             from_secret: 'AWS_ACCESS_KEY_ID',
@@ -229,7 +228,7 @@ local build(arch, test_ui) = [
       },
       {
         name: 'promote',
-        image: "debian:" + debian,
+        image: 'debian:' + debian,
         environment: {
           AWS_ACCESS_KEY_ID: {
             from_secret: 'AWS_ACCESS_KEY_ID',
