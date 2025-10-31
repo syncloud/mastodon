@@ -36,7 +36,7 @@ def test_login(selenium, device_user, device_password):
 
 def test_first_start(selenium):
     selenium.click_by(By.XPATH, "//button[contains(.,'Save and continue')]")
-    selenium.click_by(By.XPATH, "//button[contains(.,'Done')]")
+    selenium.click_by(By.XPATH, "//span[contains(.,'Done')]")
     selenium.invisible_by(By.XPATH, "//span[@text()='Your home feed is being prepared!']")
 
 def test_publish_text(selenium):
