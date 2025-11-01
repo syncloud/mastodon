@@ -6,4 +6,4 @@ export PATH=$DIR/ruby/bin:$PATH
 export RAILS_ENV=production
 export SOCKET=/var/snap/mastodon/current/backend.socket
 $DIR/bin/wait-for-db.sh
-exec $DIR/ruby/current/bin/bundle exec puma -C config/puma.rb
+exec $DIR/ruby/usr/bin/bundle exec puma -C config/puma.rb

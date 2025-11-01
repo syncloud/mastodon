@@ -2,14 +2,15 @@ package installer
 
 import (
 	"fmt"
+	"os"
+	"path"
+
 	"github.com/google/uuid"
 	cp "github.com/otiai10/copy"
 	"github.com/syncloud/golib/config"
 	"github.com/syncloud/golib/linux"
 	"github.com/syncloud/golib/platform"
 	"go.uber.org/zap"
-	"os"
-	"path"
 )
 
 const (
@@ -129,11 +130,6 @@ func (i *Installer) Initialize() error {
 		return err
 	}
 
-	//err = i.database.createDbIfMissing(App)
-	//if err != nil {
-	//	return err
-	//}
-
 	err = i.rails.Run("db:setup")
 	if err != nil {
 		return err
@@ -142,11 +138,6 @@ func (i *Installer) Initialize() error {
 	if err != nil {
 		return err
 	}
-
-	//err = i.database.Execute("postgres", fmt.Sprintf("GRANT CREATE ON SCHEMA public TO %s", App))
-	//if err != nil {
-	//	return err
-	//}
 
 	err = os.WriteFile(i.installFile, []byte("installed"), 0644)
 	if err != nil {
@@ -165,10 +156,6 @@ func (i *Installer) Upgrade() error {
 	if err != nil {
 		return err
 	}
-	//err = i.database.createDbIfMissing(App)
-	//if err != nil {
-	//	return err
-	//}
 	err = i.rails.Run("db:migrate")
 	if err != nil {
 		return err
@@ -357,4 +344,3 @@ func getOrCreateUuid(file string) (string, error) {
 	}
 	return string(content), nil
 }
-

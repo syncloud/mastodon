@@ -1,18 +1,17 @@
 local name = 'mastodon';
 local browser = 'firefox';
-local go = '1.20';
+local go = '1.24.0';
 local postgresql = '15-bullseye';
-local ruby = '3.4.3';
 local nginx = '1.24.0';
-local python = '3.9-slim-buster';
+local python = '3.12-slim-bookworm';
 local redis = '7.0.7-bullseye';
-local mastodon = '4.3.8';
+local mastodon = '4.4.8';
 local deployer = 'https://github.com/syncloud/store/releases/download/4/syncloud-release';
-local node = '20.15.1-bullseye-slim';
-local platform = '25.02';
-local selenium = '4.21.0-20240517';
-local distro_default = 'buster';
-local distros = ['bookworm', 'buster'];
+local platform = '25.09';
+local selenium = '4.35.0-20250828';
+local debian = 'bookworm-slim';
+local distro_default = 'bookworm';
+local distros = ['bookworm'];
 local dind = '20.10.21-dind';
 
 local build(arch, test_ui) = [
@@ -27,23 +26,16 @@ local build(arch, test_ui) = [
     steps: [
              {
                name: 'version',
-               image: 'debian:buster-slim',
+               image: 'debian:' + debian,
                commands: [
                  'echo $DRONE_BUILD_NUMBER > version',
                ],
              },
              {
-               name: 'download',
-               image: 'alpine:3.17.0',
+               name: 'ruby',
+               image: 'alpine:3.22.2',
                commands: [
-                 './download.sh ' + mastodon,
-               ],
-             },
-             {
-               name: 'redis',
-               image: 'docker:' + dind,
-               commands: [
-                 './redis/build.sh ' + redis,
+                 './ruby/build.sh ' + mastodon,
                ],
                volumes: [
                  {
@@ -53,8 +45,22 @@ local build(arch, test_ui) = [
                ],
              },
              {
+               name: 'ruby test',
+               image: 'syncloud/platform-' + distro_default + '-' + arch + ':' + platform,
+               commands: [
+                 'ruby/test.sh',
+               ],
+             },
+             {
+               name: 'redis',
+               image: 'redis:' + redis,
+               commands: [
+                 './redis/build.sh',
+               ],
+             },
+             {
                name: 'redis test',
-               image: 'debian:buster-slim',
+               image: 'syncloud/platform-' + distro_default + '-' + arch + ':' + platform,
                commands: [
                  './redis/test.sh',
                ],
@@ -68,49 +74,24 @@ local build(arch, test_ui) = [
              },
              {
                name: 'nginx test',
-               image: 'syncloud/platform-buster-' + arch + ':' + platform,
+               image: 'syncloud/platform-' + distro_default + '-' + arch + ':' + platform,
                commands: [
                  './nginx/test.sh',
                ],
              },
 
-             {
-               name: 'ruby',
-               image: 'docker:' + dind,
-               commands: [
-                 './ruby/build.sh ' + ruby + ' ' + node,
-               ],
-               volumes: [
-                 {
-                   name: 'dockersock',
-                   path: '/var/run',
-                 },
-               ],
-             },
-             {
-               name: 'ruby test',
-               image: 'debian:buster-slim',
-               commands: [
-                 'ruby/test.sh',
-               ],
-             },
 
              {
                name: 'postgresql',
-               image: 'docker:' + dind,
+               image: 'postgres:' + postgresql,
                commands: [
-                 './postgresql/build.sh ' + postgresql,
+                 './postgresql/build.sh',
                ],
-               volumes: [
-                 {
-                   name: 'dockersock',
-                   path: '/var/run',
-                 },
-               ],
+
              },
              {
                name: 'postgresql test',
-               image: 'debian:buster-slim',
+               image: 'syncloud/platform-' + distro_default + '-' + arch + ':' + platform,
                commands: [
                  './postgresql/test.sh',
                ],
@@ -120,33 +101,32 @@ local build(arch, test_ui) = [
                image: 'golang:' + go,
                commands: [
                  'cd cli',
-                 "go build -ldflags '-linkmode external -extldflags -static' -o ../build/snap/meta/hooks/install ./cmd/install",
-                 "go build -ldflags '-linkmode external -extldflags -static' -o ../build/snap/meta/hooks/configure ./cmd/configure",
-                 "go build -ldflags '-linkmode external -extldflags -static' -o ../build/snap/meta/hooks/pre-refresh ./cmd/pre-refresh",
-                 "go build -ldflags '-linkmode external -extldflags -static' -o ../build/snap/meta/hooks/post-refresh ./cmd/post-refresh",
-                 "go build -ldflags '-linkmode external -extldflags -static' -o ../build/snap/bin/cli ./cmd/cli",
+                 'CGO_ENABLED=0 go build -o ../build/snap/meta/hooks/install ./cmd/install',
+                 'CGO_ENABLED=0 go build -o ../build/snap/meta/hooks/configure ./cmd/configure',
+                 'CGO_ENABLED=0 go build -o ../build/snap/meta/hooks/pre-refresh ./cmd/pre-refresh',
+                 'CGO_ENABLED=0 go build -o ../build/snap/meta/hooks/post-refresh ./cmd/post-refresh',
+                 'CGO_ENABLED=0 go build -o ../build/snap/bin/cli ./cmd/cli',
                ],
              },
              {
                name: 'package',
-               image: 'debian:buster-slim',
+               image: 'debian:' + debian,
                commands: [
                  'VERSION=$(cat version)',
                  './package.sh ' + name + ' $VERSION ',
                ],
              },
-             ] + [
-               {
-                 name: 'test ' + distro,
-                 image: 'python:' + python,
-                 commands: [
-                   'APP_ARCHIVE_PATH=$(realpath $(cat package.name))',
-                   'cd test',
-                   './deps.sh',
-                   'py.test -x -s test.py --distro=' + distro + ' --domain=' + distro + '.com --app-archive-path=$APP_ARCHIVE_PATH --device-host=' + name + '.' + distro + '.com --app=' + name + ' --arch=' + arch,
-                 ],
-               }
-               for distro in distros
+           ] + [
+             {
+               name: 'test ' + distro,
+               image: 'python:' + python,
+               commands: [
+                 'cd test',
+                 './deps.sh',
+                 'py.test -x -s test.py --distro=' + distro + ' --ver=$DRONE_BUILD_NUMBER --app=' + name,
+               ],
+             }
+             for distro in distros
            ] +
            (if test_ui then (
               [
@@ -196,7 +176,7 @@ local build(arch, test_ui) = [
                   commands: [
                     'cd test',
                     './deps.sh',
-                    'py.test -x -s ui.py --distro=buster --ui-mode=desktop --domain=' + distro_default + '.com --device-host=' + name + '.' + distro_default + '.com --app=' + name + ' --browser-height=2000 --browser=' + browser,
+                    'py.test -x -s ui.py --distro=' + distro_default + ' --ver=$DRONE_BUILD_NUMBER --app=' + name + ' --browser=' + browser,
                   ],
                   volumes: [{
                     name: 'videos',
@@ -207,10 +187,9 @@ local build(arch, test_ui) = [
                   name: 'test-upgrade',
                   image: 'python:' + python,
                   commands: [
-                    'APP_ARCHIVE_PATH=$(realpath $(cat package.name))',
                     'cd test',
                     './deps.sh',
-                    'py.test -x -s upgrade.py --distro=buster --ui-mode=desktop --domain=buster.com --app-archive-path=$APP_ARCHIVE_PATH --device-host=' + name + '.buster.com --app=' + name + ' --browser=' + browser,
+                    'py.test -x -s upgrade.py --distro=' + distro_default + ' --ver=$DRONE_BUILD_NUMBER --app=' + name + ' --browser=' + browser,
                   ],
                   privileged: true,
                   volumes: [{
@@ -222,7 +201,7 @@ local build(arch, test_ui) = [
             ) else []) + [
       {
         name: 'upload',
-        image: 'debian:buster-slim',
+        image: 'debian:' + debian,
         environment: {
           AWS_ACCESS_KEY_ID: {
             from_secret: 'AWS_ACCESS_KEY_ID',
@@ -248,7 +227,7 @@ local build(arch, test_ui) = [
       },
       {
         name: 'promote',
-        image: 'debian:buster-slim',
+        image: 'debian:' + debian,
         environment: {
           AWS_ACCESS_KEY_ID: {
             from_secret: 'AWS_ACCESS_KEY_ID',
