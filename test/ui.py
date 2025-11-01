@@ -32,6 +32,7 @@ def test_start(module_setup, app, domain, device_host, device):
 
 
 def test_login(selenium, device_user, device_password):
+    selenium.driver.maximize_window()
     lib.login(selenium, device_user, device_password)
 
 def test_first_start(selenium):
