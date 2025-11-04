@@ -3,6 +3,7 @@ DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 $DIR/wait-for-db.sh
 while true; do
   echo "cleaning"
+  $DIR/tootctl.sh media remove --days 10
   $DIR/tootctl.sh media remove --prune-profiles --include-follows --days 10
   $DIR/tootctl.sh preview_cards remove --days 10
   $DIR/tootctl.sh statuses remove --days 10
