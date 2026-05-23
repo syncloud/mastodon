@@ -80,7 +80,7 @@ apps:
     command: bin/tootctl.sh
 
 confinement: strict
-description: Mastodon
+description: Social Network
 grade: stable
 name: mastodon
 summary: Mastodon
