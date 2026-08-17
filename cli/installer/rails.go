@@ -30,7 +30,10 @@ func (e *Rails) Run(arg string) error {
 	cmd := exec.Command(e.railsBin, arg)
 	e.logger.Info("executing", zap.String("cmd", cmd.String()))
 	cmd.Dir = e.mastodonDir
-	cmd.Env = append(os.Environ(), "RAILS_ENV=production")
+	cmd.Env = append(os.Environ(),
+		"RAILS_ENV=production",
+		"RUBYOPT=--disable-error_highlight --disable-did_you_mean",
+	)
 	out, err := cmd.CombinedOutput()
 	e.logger.Info("command output")
 	for _, line := range strings.Split(string(out), "\n") {

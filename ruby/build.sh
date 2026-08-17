@@ -8,11 +8,11 @@ BUILD_DIR=${DIR}/../build/snap/ruby
 mkdir -p ${BUILD_DIR}
 
 cd ${DIR}/../build
-wget https://github.com/mastodon/mastodon/archive/refs/tags/v${VERSION}.tar.gz
+${DIR}/../download-retry.sh https://github.com/mastodon/mastodon/archive/refs/tags/v${VERSION}.tar.gz v${VERSION}.tar.gz
 tar xf v${VERSION}.tar.gz
 cd mastodon-${VERSION}
 
-apk add \
+${DIR}/../apk.sh \
 ruby \
 nodejs \
 ruby-bundler \
@@ -23,6 +23,10 @@ libidn-dev \
 icu-dev \
 yaml-dev \
 zlib-dev \
+gdbm-dev \
+gmp-dev \
+openssl-dev \
+shared-mime-info \
 npm \
 vips-dev \
 git \
@@ -35,22 +39,37 @@ export RAILS_ENV=production
 export NODE_ENV=production
 export COREPACK_ENABLE_DOWNLOAD_PROMPT=0
 
+BUNDLER_VERSION=$(awk '/^BUNDLED WITH$/{getline; gsub(/ /,""); print; exit}' Gemfile.lock)
+test -n "${BUNDLER_VERSION}"
+gem install bundler -v "${BUNDLER_VERSION}" --no-document
+bundle --version | grep -q "${BUNDLER_VERSION}"
+
+PRISM_VERSION=$(awk '/^    prism \(/{gsub(/[^0-9.]/,""); print; exit}' Gemfile.lock)
+test -n "${PRISM_VERSION}"
+gem install prism -v "${PRISM_VERSION}" --no-document
+RUBY_LIB_DIR=$(ruby -e 'puts RbConfig::CONFIG["rubylibdir"]')
+RUBY_ARCH_DIR=$(ruby -e 'puts RbConfig::CONFIG["rubyarchdir"]')
+rm -rf "${RUBY_LIB_DIR}/prism.rb" "${RUBY_LIB_DIR}/prism" "${RUBY_ARCH_DIR}/prism.so"
+ruby -e 'require "prism"; raise "stale prism #{Prism::VERSION}" unless defined?(Prism::CurrentVersionError)'
+
 bundle config deployment 'true'
-bundle config without 'development test exclude'
+bundle config without 'development test'
 bundle config set silence_root_warning true
 bundle install -j$(getconf _NPROCESSORS_ONLN)
 
+rm -f /usr/bin/yarn /usr/bin/yarnpkg
 npm install -g corepack
 corepack enable
 
-yarn install
+yarn workspaces focus --production --all
 
-ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY=precompile_placeholder \
-  ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT=precompile_placeholder \
-  ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY=precompile_placeholder \
-  OTP_SECRET=precompile_placeholder \
-  SECRET_KEY_BASE=precompile_placeholder \
-  bundle exec rails assets:precompile
+SECRET_KEY_BASE_DUMMY=1 bundle exec rails assets:precompile
+
+test -d public/assets
+test -d public/packs
+for dep in express ioredis pg ws; do
+  test -d node_modules/$dep || test -d streaming/node_modules/$dep
+done
 
 apk del \
 build-base \
