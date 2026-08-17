@@ -1,18 +1,20 @@
 local name = 'mastodon';
-local browser = 'firefox';
-local go = '1.24.0';
+local mastodon = '4.6.6';
+local alpine = '3.24.1';
+local go = '1.25';
 local postgresql = '15-bullseye';
 local nginx = '1.24.0';
-local python = '3.12-slim-bookworm';
 local redis = '7.0.7-bullseye';
-local mastodon = '4.4.8';
+local python = '3.12-slim-bookworm';
+local playwright = 'mcr.microsoft.com/playwright:v1.59.1-jammy';
+local platform = '26.08.01';
 local store_publisher = 'stable-346';
-local platform = '25.09';
-local selenium = '4.35.0-20250828';
 local debian = 'bookworm-slim';
 local distro_default = 'bookworm';
-local distros = ['bookworm'];
-local dind = '20.10.21-dind';
+local distros = ['bookworm', 'buster'];
+
+local platform_image(distro) =
+  'syncloud/platform-' + distro + ':' + platform;
 
 local build(arch, test_ui) = [
   {
@@ -25,32 +27,22 @@ local build(arch, test_ui) = [
     },
     steps: [
              {
-               name: 'version',
-               image: 'debian:' + debian,
-               commands: [
-                 'echo $DRONE_BUILD_NUMBER > version',
-               ],
-             },
-             {
                name: 'ruby',
-               image: 'alpine:3.22.2',
+               image: 'alpine:' + alpine,
                commands: [
                  './ruby/build.sh ' + mastodon,
                ],
-               volumes: [
-                 {
-                   name: 'dockersock',
-                   path: '/var/run',
-                 },
-               ],
              },
+           ] + [
              {
-               name: 'ruby test',
-               image: 'syncloud/platform-' + distro_default + '-' + arch + ':' + platform,
+               name: 'ruby test ' + distro,
+               image: platform_image(distro),
                commands: [
-                 'ruby/test.sh',
+                 './ruby/test.sh',
                ],
-             },
+             }
+             for distro in distros
+           ] + [
              {
                name: 'redis',
                image: 'redis:' + redis,
@@ -58,13 +50,16 @@ local build(arch, test_ui) = [
                  './redis/build.sh',
                ],
              },
+           ] + [
              {
-               name: 'redis test',
-               image: 'syncloud/platform-' + distro_default + '-' + arch + ':' + platform,
+               name: 'redis test ' + distro,
+               image: platform_image(distro),
                commands: [
                  './redis/test.sh',
                ],
-             },
+             }
+             for distro in distros
+           ] + [
              {
                name: 'nginx',
                image: 'nginx:' + nginx,
@@ -72,48 +67,55 @@ local build(arch, test_ui) = [
                  './nginx/build.sh',
                ],
              },
+           ] + [
              {
-               name: 'nginx test',
-               image: 'syncloud/platform-' + distro_default + '-' + arch + ':' + platform,
+               name: 'nginx test ' + distro,
+               image: platform_image(distro),
                commands: [
                  './nginx/test.sh',
                ],
-             },
-
-
+             }
+             for distro in distros
+           ] + [
              {
                name: 'postgresql',
                image: 'postgres:' + postgresql,
                commands: [
                  './postgresql/build.sh',
                ],
-
              },
+           ] + [
              {
-               name: 'postgresql test',
-               image: 'syncloud/platform-' + distro_default + '-' + arch + ':' + platform,
+               name: 'postgresql test ' + distro,
+               image: platform_image(distro),
                commands: [
                  './postgresql/test.sh',
                ],
-             },
+             }
+             for distro in distros
+           ] + [
              {
                name: 'cli',
                image: 'golang:' + go,
                commands: [
-                 'cd cli',
-                 'CGO_ENABLED=0 go build -o ../build/snap/meta/hooks/install ./cmd/install',
-                 'CGO_ENABLED=0 go build -o ../build/snap/meta/hooks/configure ./cmd/configure',
-                 'CGO_ENABLED=0 go build -o ../build/snap/meta/hooks/pre-refresh ./cmd/pre-refresh',
-                 'CGO_ENABLED=0 go build -o ../build/snap/meta/hooks/post-refresh ./cmd/post-refresh',
-                 'CGO_ENABLED=0 go build -o ../build/snap/bin/cli ./cmd/cli',
+                 './cli/build.sh',
                ],
              },
+           ] + [
+             {
+               name: 'cli test ' + distro,
+               image: platform_image(distro),
+               commands: [
+                 './cli/test.sh',
+               ],
+             }
+             for distro in distros
+           ] + [
              {
                name: 'package',
                image: 'debian:' + debian,
                commands: [
-                 'VERSION=$(cat version)',
-                 './package.sh ' + name + ' $VERSION ',
+                 './package.sh ' + name + ' $DRONE_BUILD_NUMBER',
                ],
              },
            ] + [
@@ -121,84 +123,48 @@ local build(arch, test_ui) = [
                name: 'test ' + distro,
                image: 'python:' + python,
                commands: [
-                 'cd test',
-                 './deps.sh',
-                 'py.test -x -s test.py --distro=' + distro + ' --ver=$DRONE_BUILD_NUMBER --app=' + name,
+                 './ci/test.sh test.py ' + distro + ' ' + name,
                ],
              }
              for distro in distros
            ] +
-           (if test_ui then (
-              [
-                {
-                  name: 'selenium',
-                  image: 'selenium/standalone-' + browser + ':' + selenium,
-                  detach: true,
-                  environment: {
-                    SE_NODE_SESSION_TIMEOUT: '999999',
-                    START_XVFB: 'true',
-                  },
-                  volumes: [{
-                    name: 'shm',
-                    path: '/dev/shm',
-                  }],
-                  commands: [
-                    'cat /etc/hosts',
-                    'DOMAIN="' + distro_default + '.com"',
-                    'APP_DOMAIN="' + name + '.' + distro_default + '.com"',
-                    'getent hosts $APP_DOMAIN | sed "s/$APP_DOMAIN/auth.$DOMAIN/g" | sudo tee -a /etc/hosts',
-                    'cat /etc/hosts',
-                    '/opt/bin/entry_point.sh',
-                  ],
-                },
-                {
-                  name: 'selenium-video',
-                  image: 'selenium/video:ffmpeg-6.1.1-20240621',
-                  detach: true,
-                  environment: {
-                    DISPLAY_CONTAINER_NAME: 'selenium',
-                    FILE_NAME: 'video.mkv',
-                  },
-                  volumes: [
-                    {
-                      name: 'shm',
-                      path: '/dev/shm',
-                    },
-                    {
-                      name: 'videos',
-                      path: '/videos',
-                    },
-                  ],
-                },
-                {
-                  name: 'test-ui',
-                  image: 'python:' + python,
-                  commands: [
-                    'cd test',
-                    './deps.sh',
-                    'py.test -x -s ui.py --distro=' + distro_default + ' --ver=$DRONE_BUILD_NUMBER --app=' + name + ' --browser=' + browser,
-                  ],
-                  volumes: [{
-                    name: 'videos',
-                    path: '/videos',
-                  }],
-                },
-                {
-                  name: 'test-upgrade',
-                  image: 'python:' + python,
-                  commands: [
-                    'cd test',
-                    './deps.sh',
-                    'py.test -x -s upgrade.py --distro=' + distro_default + ' --ver=$DRONE_BUILD_NUMBER --app=' + name + ' --browser=' + browser,
-                  ],
-                  privileged: true,
-                  volumes: [{
-                    name: 'videos',
-                    path: '/videos',
-                  }],
-                },
-              ]
-            ) else []) + [
+           (if test_ui then [
+              {
+                name: 'e2e',
+                image: playwright,
+                commands: [
+                  './test/e2e/run.sh e2e specs/01-smoke.spec.ts ' + distro_default,
+                ],
+              },
+              {
+                name: 'test-upgrade-prev',
+                image: 'python:' + python,
+                commands: [
+                  './ci/test.sh upgrade_prev.py ' + distro_default + ' ' + name,
+                ],
+              },
+              {
+                name: 'e2e-before-upgrade',
+                image: playwright,
+                commands: [
+                  './test/e2e/run.sh e2e-before-upgrade specs/02-pre-upgrade.spec.ts ' + distro_default,
+                ],
+              },
+              {
+                name: 'test-upgrade',
+                image: 'python:' + python,
+                commands: [
+                  './ci/test.sh upgrade.py ' + distro_default + ' ' + name,
+                ],
+              },
+              {
+                name: 'e2e-after-upgrade',
+                image: playwright,
+                commands: [
+                  './test/e2e/run.sh e2e-after-upgrade specs/03-post-upgrade.spec.ts ' + distro_default,
+                ],
+              },
+            ] else []) + [
       {
         name: 'publish',
         image: 'syncloud/store-publisher:' + store_publisher,
@@ -215,85 +181,44 @@ local build(arch, test_ui) = [
         name: 'artifact',
         image: 'appleboy/drone-scp:1.6.4',
         settings: {
-          host: {
-            from_secret: 'artifact_host',
-          },
+          host: { from_secret: 'artifact_host' },
           username: 'artifact',
-          key: {
-            from_secret: 'artifact_key',
-          },
+          key: { from_secret: 'artifact_key' },
           timeout: '2m',
           command_timeout: '2m',
           target: '/home/artifact/repo/' + name + '/${DRONE_BUILD_NUMBER}-' + arch,
-          source: 'artifact/*',
+          source: ['artifact/*'],
           strip_components: 1,
         },
         when: {
           status: ['failure', 'success'],
-          event: ['push'],
         },
       },
     ],
     trigger: {
-      event: [
-        'push',
-        'pull_request',
-      ],
+      event: ['push'],
     },
     services: [
       {
-        name: 'docker',
-        image: 'docker:' + dind,
-        privileged: true,
-        volumes: [
-          {
-            name: 'dockersock',
-            path: '/var/run',
-          },
-        ],
-      },
-    ] + [
-      {
         name: name + '.' + distro + '.com',
-        image: 'syncloud/platform-' + distro + '-' + arch + ':' + platform,
+        image: platform_image(distro),
         privileged: true,
+        entrypoint: ['/bin/sh', '-c', "mkdir -p /etc/systemd/system/snapd.service.d && printf '[Service]\\nExecStartPost=/bin/sh -c \"/usr/bin/snap set system refresh.hold=2099-01-01T00:00:00Z\"\\n' > /etc/systemd/system/snapd.service.d/disable-refresh.conf && exec /sbin/init"],
         volumes: [
-          {
-            name: 'dbus',
-            path: '/var/run/dbus',
-          },
-          {
-            name: 'dev',
-            path: '/dev',
-          },
+          { name: 'dbus', path: '/var/run/dbus' },
+          { name: 'dev', path: '/dev' },
         ],
       }
       for distro in distros
     ],
     volumes: [
       {
-        name: 'dockersock',
-        temp: {},
-      },
-      {
         name: 'dbus',
-        host: {
-          path: '/var/run/dbus',
-        },
+        host: { path: '/var/run/dbus' },
       },
       {
         name: 'dev',
-        host: {
-          path: '/dev',
-        },
-      },
-      {
-        name: 'shm',
-        temp: {},
-      },
-      {
-        name: 'videos',
-        temp: {},
+        host: { path: '/dev' },
       },
     ],
   },
