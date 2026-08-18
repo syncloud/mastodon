@@ -80,7 +80,7 @@ def test_access_change_event(device):
 
 
 def test_tootclt_change_event(device):
-    device.run_ssh('snap run mastodon.tootctl > {0}/tootctl.log'.format(TMP_DIR))
+    device.run_ssh('snap run mastodon.tootctl > {0}/tootctl.log 2>&1'.format(TMP_DIR), retries=3)
 
 
 def test_ffmpeg(device):

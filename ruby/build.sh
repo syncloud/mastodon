@@ -59,9 +59,21 @@ bundle install -j$(getconf _NPROCESSORS_ONLN)
 
 rm -f /usr/bin/yarn /usr/bin/yarnpkg
 npm install -g corepack
-corepack enable
 
-yarn workspaces focus --production --all
+yarn_install() {
+  corepack enable && yarn workspaces focus --production --all
+}
+
+installed=0
+for attempt in 1 2 3 4 5; do
+  if yarn_install; then
+    installed=1
+    break
+  fi
+  echo "retry yarn install (${attempt})"
+  sleep 10
+done
+[ ${installed} -eq 1 ]
 
 SECRET_KEY_BASE_DUMMY=1 bundle exec rails assets:precompile
 
